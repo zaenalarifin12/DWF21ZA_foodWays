@@ -3,9 +3,11 @@ import Header from "../parts/Header";
 import Hero from "../parts/Hero";
 import CardProductRestaurant from "../components/CardProductRestaurant";
 import CardRestaurant from "../components/CardRestaurant";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
+import { sellers } from "../data/users";
 
 function Landing() {
+  const [sellersList, setSellersList] = useState(sellers);
 
   return (
     <div className="bg-warning">
@@ -18,13 +20,23 @@ function Landing() {
           <h3 className="h4">Popular Restaurant</h3>
           <div className="mt-4">
             <div className="row">
-              <CardRestaurant
-                src="/images/burger-king.png"
-                name="Burger King"
-              />
-              <CardRestaurant src="/images/starbuck.png" name="StarBucks" />
-              <CardRestaurant src="/images/kfc.png" name="KFC" />
-              <CardRestaurant src="/images/jso.png" name="Jco" />
+              {sellersList.map((seller) => {
+                return (
+                  <Link
+                    to={`/restaurant/${seller.id}/food`}
+                    className="col-3"
+                    style={{
+                      textDecoration: "none",
+                    }}
+                  >
+                    <CardRestaurant
+                      key={seller.id}
+                      src={seller.image}
+                      name={seller.fullname}
+                    ></CardRestaurant>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -32,7 +44,6 @@ function Landing() {
           <h3 className="h4">Restaurant Near You</h3>
           <div className="mt-4">
             <div className="row">
-
               <CardProductRestaurant
                 src="/images/geprek-bensu.png"
                 name="Geprek Bensu"

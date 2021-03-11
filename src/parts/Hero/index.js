@@ -22,7 +22,7 @@ function Hero() {
             </div>
           </div>
           <div className="col">
-            <img src="/images/food.png" />
+            <img src="/images/food.png" alt="food" />
           </div>
         </div>
       </div>

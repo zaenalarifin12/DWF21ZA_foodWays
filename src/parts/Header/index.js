@@ -3,6 +3,7 @@ import Login from "../Login";
 import Register from "../Register";
 import { Button, OverlayTrigger, Popover } from "react-bootstrap";
 import { withRouter } from "react-router";
+import Cart from "./../../components/Cart";
 
 function Header(props) {
   const [modalLoginShow, setModalLoginShow] = React.useState(false);
@@ -11,7 +12,7 @@ function Header(props) {
   const handleLogout = () => {
     localStorage.removeItem("token");
     props.history.push("/");
-  }
+  };
 
   return (
     <div className="d-flex flex-column flex-md-row align-items-center p-3 px-md-5 mb-3">
@@ -21,9 +22,7 @@ function Header(props) {
 
       {localStorage.getItem("token") != null ? (
         <>
-          <div className="mr-4">
-            <img src="images/cart.png" />
-          </div>
+          <Cart />
           <div>
             <OverlayTrigger
               trigger="click"
@@ -55,7 +54,10 @@ function Header(props) {
                         src="/images/logout.png"
                         className="mr-2"
                       />
-                      <a onClick={handleLogout} className="font-weight-bold text-choco">
+                      <a
+                        onClick={handleLogout}
+                        className="font-weight-bold text-choco"
+                      >
                         Logout
                       </a>
                     </div>
@@ -64,7 +66,7 @@ function Header(props) {
               }
             >
               <img
-                src="images/profile-img.png"
+                src="/images/profile-img.png"
                 className="img-thumbnail rounded-circle border border-choco bg-choco"
               />
             </OverlayTrigger>
