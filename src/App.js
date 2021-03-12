@@ -14,6 +14,7 @@ import Map from "./parts/Map";
 import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
 import AddProduct from "./pages/AddProduct";
+import Transaction from "./pages/Transaction";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <PrivateRoute path="/profile" component={Profile} />
             <PrivateRoute path="/edit-profile" component={EditProfile} />
             <PrivateRoute path="/add-product" component={AddProduct} />
+            <PrivateRoute path="/transaction" component={Transaction} />
           </Switch>
         </Router>
       </div>
