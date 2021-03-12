@@ -35,7 +35,7 @@ function Header(props) {
                 <Popover id={`popover-positioned-bottom`}>
                   <Popover.Content>
                     <div className="my-2">
-                      <Link to={`/profile`} style={{ textDecoration: "none"}}>
+                      <Link to={`/profile`} className="d-flex  align-items-center" style={{ textDecoration: "none" }}>
                         <img
                           style={{ width: 30 }}
                           src="/images/user.png"
@@ -46,13 +46,15 @@ function Header(props) {
                         </span>
                       </Link>
                     </div>
-                    <div className="my-2">
-                      <img
-                        style={{ width: 30 }}
-                        src="/images/add-product.png"
-                        className="mr-2"
-                      />
-                      <span className="font-weight-bold">Add Product</span>
+                    <div className="my-2 ">
+                      <Link to={`/add-product`} className="d-flex  align-items-center" style={{ textDecoration: "none" }}>
+                        <img
+                          style={{ width: 30 }}
+                          src="/images/add-product.png"
+                          className="mr-2"
+                        />
+                        <span className="text-choco font-weight-bold">Add Product</span>
+                      </Link>
                     </div>
                     <hr className="border-top" />
                     <div className="my-2">

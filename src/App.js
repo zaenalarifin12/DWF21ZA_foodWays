@@ -13,6 +13,7 @@ import CartOrder from "./pages/CartOrder";
 import Map from "./parts/Map";
 import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
+import AddProduct from "./pages/AddProduct";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             {/* <PrivateRoute path="/map" component={Map} /> */}
             <PrivateRoute path="/profile" component={Profile} />
             <PrivateRoute path="/edit-profile" component={EditProfile} />
+            <PrivateRoute path="/add-product" component={AddProduct} />
           </Switch>
         </Router>
       </div>
