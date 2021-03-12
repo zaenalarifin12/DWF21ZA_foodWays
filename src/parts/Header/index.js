@@ -19,9 +19,8 @@ function Header(props) {
     <div className="d-flex flex-column flex-md-row align-items-center p-3 px-md-5 mb-3">
       <h5 className="my-0 mr-md-auto font-weight-normal">
         <Link to={`/`}>
-        <img src="/images/logo.png" />
+          <img src="/images/logo.png" />
         </Link>
-        
       </h5>
 
       {localStorage.getItem("token") != null ? (
@@ -36,12 +35,16 @@ function Header(props) {
                 <Popover id={`popover-positioned-bottom`}>
                   <Popover.Content>
                     <div className="my-2">
-                      <img
-                        style={{ width: 30 }}
-                        src="/images/user.png"
-                        className="mr-2"
-                      />
-                      <span className="font-weight-bold">Profile Partner</span>
+                      <Link to={`/profile`} style={{ textDecoration: "none"}}>
+                        <img
+                          style={{ width: 30 }}
+                          src="/images/user.png"
+                          className="mr-2"
+                        />
+                        <span className="text-choco font-weight-bold">
+                          Profile Partner
+                        </span>
+                      </Link>
                     </div>
                     <div className="my-2">
                       <img

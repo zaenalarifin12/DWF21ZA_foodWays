@@ -11,6 +11,8 @@ import Landing from "./pages/Landing";
 import RestaurantMenu from "./pages/RestaurantMenu";
 import CartOrder from "./pages/CartOrder";
 import Map from "./parts/Map";
+import Profile from "./pages/Profile";
+import EditProfile from "./pages/EditProfile";
 
 function App() {
   return (
@@ -24,14 +26,14 @@ function App() {
               component={RestaurantMenu}
             />
             <PrivateRoute path="/cart-order" component={CartOrder} />
-            <PrivateRoute path="/map" component={Map} />
-            
+            {/* <PrivateRoute path="/map" component={Map} /> */}
+            <PrivateRoute path="/profile" component={Profile} />
+            <PrivateRoute path="/edit-profile" component={EditProfile} />
           </Switch>
         </Router>
       </div>
     </CountCartContextProvider>
   );
 }
-
 
 export default App;

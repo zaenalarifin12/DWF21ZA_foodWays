@@ -88,4 +88,33 @@ $theme-colors: map-merge(
   $theme-colors
 );
 
+
+.bg-finish {
+  background: linear-gradient(180deg, #00ff75 0%, #00ff85 100%);
+  opacity: 0.1;
+  border-radius: 2px;
+  border-style: "none";
+}
+textarea:hover, 
+input:hover, 
+textarea:active, 
+input:active, 
+textarea:focus, 
+input:focus,
+button:focus,
+button:active,
+button:hover,
+label:focus,
+.btn:active,
+.btn.active
+{
+    outline:0px !important;
+    -webkit-appearance:none;
+    box-shadow: none !important;
+}
+
+$custom-file-text: (
+  en: "Browse",
+  es: "Elegir"
+);
 @import "~bootstrap/scss/bootstrap";

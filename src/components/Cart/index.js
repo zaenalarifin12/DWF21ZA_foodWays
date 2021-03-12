@@ -9,9 +9,14 @@ function Cart() {
     <div className="mr-4">
       <Link to={`/cart-order`}>
         <img src="/images/cart.png" />
-        <span class="badge badge-danger">
-          {Object.keys(state.foods).length}
-        </span>
+
+        {Object.keys(state.foods).length > 0 ? (
+          <span class="badge badge-danger">
+            {Object.keys(state.foods).length}
+          </span>
+        ) : (
+          <></>
+        )}
       </Link>
     </div>
   );

@@ -57,13 +57,13 @@ const reducer = (state, action) => {
       food = state.foods.find((x) => x.id === payload.id);
       foodNow = state.foods.filter((x) => x.id !== payload.id);
 
-      // if (food) {
-      //   let foods = JSON.stringify([...foodNow]);
-      //   localStorage.removeItem("cart");
-      //   localStorage.setItem("cart", foods);
-
-        return { foods: [...foodNow] };
-      // }
+      if (food) {
+        let foods = JSON.stringify([...foodNow]);
+        localStorage.removeItem("cart");
+        localStorage.setItem("cart", foods);
+      }
+      return { foods: [...foodNow] };
+    // }
 
     default:
       // return state.foods;
