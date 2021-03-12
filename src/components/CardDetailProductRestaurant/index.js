@@ -13,7 +13,9 @@ function CardDetailProductRestaurant(props) {
           <p className="card-text text-danger">
             Rp. {parseInt(props.price).toLocaleString()}
           </p>
-          <Button type="button" className="btn btn-warning btn-sm btn-block">
+          <Button type="button" className="btn btn-warning btn-sm btn-block"
+          onClick={props.onClick}
+          >
             Order
           </Button>
         </div>

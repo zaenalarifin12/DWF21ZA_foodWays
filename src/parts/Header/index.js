@@ -4,6 +4,7 @@ import Register from "../Register";
 import { Button, OverlayTrigger, Popover } from "react-bootstrap";
 import { withRouter } from "react-router";
 import Cart from "./../../components/Cart";
+import { Link } from "react-router-dom";
 
 function Header(props) {
   const [modalLoginShow, setModalLoginShow] = React.useState(false);
@@ -17,7 +18,10 @@ function Header(props) {
   return (
     <div className="d-flex flex-column flex-md-row align-items-center p-3 px-md-5 mb-3">
       <h5 className="my-0 mr-md-auto font-weight-normal">
+        <Link to={`/`}>
         <img src="/images/logo.png" />
+        </Link>
+        
       </h5>
 
       {localStorage.getItem("token") != null ? (
