@@ -10,9 +10,9 @@ function Cart() {
       <Link to={`/cart-order`}>
         <img src="/images/cart.png" />
 
-        {Object.keys(state.foods).length > 0 ? (
+        {state.allQty > 0 ? (
           <span class="badge badge-danger">
-            {Object.keys(state.foods).length}
+            {state.allQty}
           </span>
         ) : (
           <></>

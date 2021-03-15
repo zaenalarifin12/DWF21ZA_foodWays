@@ -5,6 +5,8 @@ import Header from "./../parts/Header";
 import { Input, Button, Form, Row, Col } from "react-bootstrap";
 import ModalMap from "../parts/ModalMap";
 
+// redirect login 
+// mapbox
 function Transaction(props) {
   const initialState = [
     {
