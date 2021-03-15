@@ -1,53 +1,106 @@
-import React from "react";
-import { withRouter } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { useHistory, withRouter } from "react-router-dom";
 import { Modal, Button, Form } from "react-bootstrap";
+import { AuthContext } from "../../context/AuthContext";
+import { LOGIN } from "../../config/Constants";
+import Register from "../Register";
 
 function Login(props) {
+  let history = useHistory();
+  
+  const { dispatch } = useContext(AuthContext);
 
-  const handleLogin = () => {
-    localStorage.setItem("token", "1234");
-    props.history.push("/")
-  }
+  const initialState = {
+    email: "",
+    password: "",
+    isSubmiting: false,
+  };
+
+  const [data, setData] = useState(initialState);
+
+  const handleInputChange = (event) => {
+    setData({
+      ...data,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    setData({
+      ...data,
+      isSubmiting: true,
+    });
+
+    const user = { ...data, token: "12341234", role: 1 };
+
+    dispatch({
+      type: LOGIN,
+      payload: { user: user, token: "12341234" },
+    });
+    
+    history.push("/");
+  };
 
   return (
-    <Modal
-      {...props}
-      size="md"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header closeButton style={{ border: "none" }}>
-        <Modal.Title>
-          <h1 className="text-warning">Login</h1>
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form>
-          <Form.Group>
-            <Form.Control
-              className="border border-choco bg-light"
-              type="email"
-              placeholder="Email"
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Control
-              className="border border-choco bg-light"
-              type="password"
-              placeholder="Password"
-            />
-          </Form.Group>
-          
-          <div className="mt-5"></div>
-          <Button onClick={handleLogin} className="btn-block btn-choco">Login</Button>
-        </Form>
+    <>
+      <Modal
+        show={props.show}
+        onHide={props.onHide}
+        size="md"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton style={{ border: "none" }}>
+          <Modal.Title>
+            <h1 className="text-warning">Login</h1>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleFormSubmit}>
+            <Form.Group>
+              <Form.Control
+                className="border border-choco bg-light"
+                type="email"
+                placeholder="Email"
+                value={data.email}
+                onChange={handleInputChange}
+                name="email"
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Control
+                className="border border-choco bg-light"
+                type="password"
+                placeholder="Password"
+                value={data.password}
+                onChange={handleInputChange}
+                name="password"
+              />
+            </Form.Group>
 
-        <p className="text-secondary text-center mt-2">
-        Don't have an account ? Klik{" "}
-          <span className="font-weight-bold"> Here </span>
-        </p>
-      </Modal.Body>
-    </Modal>
+            <div className="mt-5"></div>
+            <Button
+              type="submit"
+              disabled={data.isSubmiting}
+              className="btn-block btn-choco"
+            >
+              {data.isSubmiting ? "Loading" : "Login"}
+            </Button>
+          </Form>
+
+          <p className="text-secondary text-center mt-2">
+            Don't have an account ? Klik{" "}
+            <span
+            onClick={props.showRegister}
+            style={{ cursor: "pointer" }} className="font-weight-bold">
+              {" "}
+              Here{" "}
+            </span>
+          </p>
+        </Modal.Body>
+      </Modal>
+    </>
   );
 }
 

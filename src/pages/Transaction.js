@@ -27,15 +27,15 @@ function Transaction(props) {
               </Row>
               
               <Row>
-                <table class="table table-bordered">
-                  <thead>
+                <table class="table table-striped">
+                  <thead style={{backgroundColor: "#f6f6f6"}}>
                     <tr>
-                      <th scope="col">No</th>
-                      <th scope="col">Name</th>
-                      <th scope="col">Address</th>
-                      <th scope="col">Products Order</th>
-                      <th scope="col">Status</th>
-                      <th scope="col">Action</th>
+                      <th class="text-center" >No</th>
+                      <th class="text-center" >Name</th>
+                      <th class="text-center" >Address</th>
+                      <th class="text-center" >product order</th>
+                      <th class="text-center" >Status</th>
+                      <th class="text-center" >Action</th>
                     </tr>
                   </thead>
                   <tbody style={{backgroundColor: "white"}}>
@@ -51,7 +51,7 @@ function Transaction(props) {
                       </td>
                     </tr>
                     <tr>
-                      <th>1</th>
+                      <th>2</th>
                       <td>Sugeng No Pants</td>
                       <td>Cileungsi</td>
                       <td>Pkaket Geprek, Paket ke..</td>
@@ -61,7 +61,7 @@ function Transaction(props) {
                       </td>
                     </tr>
                     <tr>
-                      <th>1</th>
+                      <th>3</th>
                       <td>Sugeng No Pants</td>
                       <td>Cileungsi</td>
                       <td>Pkaket Geprek, Paket ke..</td>
@@ -71,7 +71,7 @@ function Transaction(props) {
                       </td>
                     </tr>
                     <tr>
-                      <th>1</th>
+                      <th>4</th>
                       <td>Sugeng No Pants</td>
                       <td>Cileungsi</td>
                       <td>Pkaket Geprek, Paket ke..</td>

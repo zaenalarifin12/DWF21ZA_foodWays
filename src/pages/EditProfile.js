@@ -1,14 +1,39 @@
 import React, { useState, useEffect, useReducer, useContext } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useHistory } from "react-router-dom";
 
 import Header from "./../parts/Header";
 import { Input, Button, Form, Row, Col } from "react-bootstrap";
+
+import SweetAlert from "react-bootstrap-sweetalert";
 import ModalMap from "../parts/ModalMap";
 
 function EditProfile(props) {
+  let history = useHistory();
+
+  const [success, setSuccess] = useState(false);
+
+  const [modalMapShow, setModalMapShow] = useState(false);
+
+  const handleSaveProfile = () => {
+    setSuccess(true);
+  };
+
   return (
     <div className="bg-warning">
       <Header />
+
+      {success ? (
+        <SweetAlert
+          success
+          title="Profile has updated"
+          onConfirm={() => {
+            history.push("/profile");
+          }}
+          timeout={2000}
+        ></SweetAlert>
+      ) : (
+        <></>
+      )}
 
       <div
         className=""
@@ -80,18 +105,29 @@ function EditProfile(props) {
                         </Form.Group>
                       </Col>
                       <Col>
-                        <Button className="btn-block btn-choco">
+                        <Button
+                          onClick={() => setModalMapShow(true)}
+                          size="lg"
+                          className="btn-block btn-choco"
+                        >
                           Select On Map <img src="icons/map.svg" />
                         </Button>
+
+                        <ModalMap
+                          show={modalMapShow}
+                          onHide={() => setModalMapShow(false)}
+                        />
                       </Col>
                     </Row>
 
                     <div className="mt-5"></div>
-                    <Link to={`/profile`}>
-                      <Button className="float-right px-5 btn-choco">
-                        Save
-                      </Button>
-                    </Link>
+
+                    <Button
+                      onClick={handleSaveProfile}
+                      className="float-right px-5 btn-choco"
+                    >
+                      Save
+                    </Button>
                   </Form>
                 </Col>
               </Row>

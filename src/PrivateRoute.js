@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Route } from "react-router-dom";
+import { Link, Route, Redirect } from "react-router-dom";
 import Login from "./parts/Login";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -13,11 +13,12 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         ) : (
           <>
             <Link to="/">
-              <Login
-                show={modalLoginShow}
-                onHide={() => setModalLoginShow(false)}
-              />
+            <Login
+              show={modalLoginShow}
+              onHide={() => setModalLoginShow(false)}
+            />
             </Link>
+            
           </>
         )
       }

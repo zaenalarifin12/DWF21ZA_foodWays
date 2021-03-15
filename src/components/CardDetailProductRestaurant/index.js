@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "react-bootstrap";
+import { formatRupiah } from "../../utils/formatRupiah";
 
 function CardDetailProductRestaurant(props) {
   return (
@@ -11,7 +12,8 @@ function CardDetailProductRestaurant(props) {
             {props.name}
           </h5>
           <p className="card-text text-danger">
-            Rp. {parseInt(props.price).toLocaleString()}
+            {
+            formatRupiah(props.price)}
           </p>
           <Button type="button" className="btn btn-warning btn-sm btn-block"
           onClick={props.onClick}

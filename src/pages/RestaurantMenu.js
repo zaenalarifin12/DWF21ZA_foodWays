@@ -5,41 +5,42 @@ import Header from "./../parts/Header";
 import CardDetailProductRestaurant from "./../components/CardDetailProductRestaurant";
 
 import { INCREMENT_FOOD } from "../config/Constants";
-import { sellers } from "../data/users";
+import { restaurantNear } from "../data/users";
 import {
   CountCartContextProvider,
   CountCartContext,
 } from "../context/CountCartContext";
 
 function RestaurantMenu(props) {
-    const [ state, dispatch ] = useContext(CountCartContext);
+  const [state, dispatch] = useContext(CountCartContext);
 
-  const [seller, setSeller] = useState(null);
+  const [restaurantNearList, setRestaurantNearList] = useState(null);
 
   const params = useParams();
   const { id } = params;
 
   useEffect(() => {
-    SellerById();
+    RestaurantById();
   }, []);
 
-  const SellerById = () => {
-    const filterSeller = sellers.find((seller) => seller.id == id);
-    setSeller(filterSeller);
+  const RestaurantById = () => {
+    const filterRestaurant = restaurantNear.find((restaurant) => restaurant.id == id);
+    setRestaurantNearList(filterRestaurant);
   };
 
   return (
     // <CountCartContextProvider>
-      <div className="bg-warning">
-        <Header />
+    <div className="bg-warning">
+      <Header />
 
-        <div style={{ backgroundColor: "#E5E5E5" }}>
-          {/* {count} */}
-          <div className="container pt-5 pb-5">
-            <h3 className="h4">{seller && seller.fullname}</h3>
-            <div className="mt-4">
-              <div className="row">
-                {seller && seller.foods.map((food) => {
+      <div style={{ backgroundColor: "#E5E5E5" }}>
+        {/* {count} */}
+        <div className="container pt-5 pb-5">
+          <h3 className="h4">{restaurantNearList != null ? restaurantNearList.name : ""}</h3>
+          <div className="mt-4">
+            <div className="row">
+              {restaurantNearList != null ? (
+                restaurantNearList.foods.map((food) => {
                   return (
                     <CardDetailProductRestaurant
                       key={food.id}
@@ -49,17 +50,21 @@ function RestaurantMenu(props) {
                       onClick={() => {
                         dispatch({
                           type: INCREMENT_FOOD,
-                          payload: food
+                          payload: food,
+                          name: restaurantNearList.name
                         });
                       }}
                     />
                   );
-                })}
-              </div>
+                })
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         </div>
       </div>
+    </div>
     // </CountCartContextProvider>
   );
 }

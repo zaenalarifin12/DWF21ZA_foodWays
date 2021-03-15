@@ -4,11 +4,32 @@ import { useParams, Link } from "react-router-dom";
 import Header from "./../parts/Header";
 import { Input, Button, Form, Row, Col } from "react-bootstrap";
 import ModalMap from "../parts/ModalMap";
+import SweetAlert from "react-bootstrap-sweetalert";
 
 function AddProduct(props) {
+  const [success, setSuccess] = useState(false);
+
+  const handleAddProduct = () => {
+    setSuccess(true);
+  };
+
   return (
     <div className="bg-warning">
       <Header />
+
+      {success ? (
+        <SweetAlert
+          success
+          title="Produk berhasil ditambah!"
+          onConfirm={() => {
+            setSuccess(false)
+          }}
+          timeout={2000}
+        >
+        </SweetAlert>
+      ) : (
+        <></>
+      )}
 
       <div
         className=""
@@ -62,13 +83,15 @@ function AddProduct(props) {
                         placeholder="Price"
                       />
                     </Form.Group>
-                  
+
                     <div className="mt-5"></div>
-                    <Link to={`/profile`}>
-                      <Button className="float-right px-5 btn-choco">
-                        Save
-                      </Button>
-                    </Link>
+
+                    <Button
+                      onClick={handleAddProduct}
+                      className="float-right px-5 btn-choco"
+                    >
+                      Save
+                    </Button>
                   </Form>
                 </Col>
               </Row>

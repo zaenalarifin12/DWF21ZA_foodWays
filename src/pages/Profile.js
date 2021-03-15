@@ -4,8 +4,14 @@ import { useParams, Link } from "react-router-dom";
 import Header from "./../parts/Header";
 import { Input, Button, Form, Row, Col } from "react-bootstrap";
 import ModalMap from "../parts/ModalMap";
+import { OrderContext } from "../context/OrderContext";
+import { formatRupiah } from "../utils/formatRupiah";
 
 function Profile(props) {
+  const [state, dispatch] = useContext(OrderContext);
+
+  const user = JSON.parse(localStorage.getItem("user"));
+
   return (
     <div className="bg-warning">
       <Header />
@@ -22,7 +28,9 @@ function Profile(props) {
             <Col>
               <Row>
                 <Col>
-                  <h1 className="h3 ">My Profile</h1>
+                  <h1 className="h3 ">
+                    {user.role == 1 ? "My Profile" : "Profile Partner"}
+                  </h1>
                 </Col>
               </Row>
               <Row className="float-left">
@@ -33,7 +41,7 @@ function Profile(props) {
                     className="rounded"
                     style={{ objectFit: "cover" }}
                   />
-                  <Link to={`/edit-profile`} style={{ textDecoration: "none"}}>
+                  <Link to={`/edit-profile`} style={{ textDecoration: "none" }}>
                     <Button className="mt-4 btn btn-block btn-choco ">
                       Edit Profile
                     </Button>
@@ -75,98 +83,55 @@ function Profile(props) {
                   <h1 className="h3 ">History Transaction</h1>
                 </Col>
               </Row>
-              <Row className="bg-white p-2 rounded my-2">
-                <Col>
-                  <div>
-                    <span className="h5">Geprek Bensu</span>
-                  </div>
-                  <div>
-                    <span>
-                      <span className="font-weight-bold">Saturday,</span> 12
-                      march 2021
-                    </span>
-                  </div>
-                  <div className="mt-4">
-                    <span
-                      className="font-weight-bold"
-                      style={{ color: "#974A4A" }}
-                    >
-                      Total : Rp 45.000
-                    </span>
-                  </div>
-                </Col>
-                <Col>
-                  <Row className="d-flex justify-content-end">
-                    <img src="/images/logo.png" />
-                  </Row>
-                  <Row className="mt-4 d-flex justify-content-end ">
-                    <Button
-                      variant="light"
-                      className="bg-finish btn text-success font-weight-normal disabled"
-                    >
-                      Finished
-                    </Button>
-                  </Row>
-                </Col>
-              </Row>
-              <Row className="bg-white p-2 rounded my-2">
-                <Col>
-                  <div>
-                    <span className="h5">Geprek Bensu</span>
-                  </div>
-                  <div>
-                    <span>
-                      <span className="font-weight-bold">Saturday,</span> 12
-                      march 2021
-                    </span>
-                  </div>
-                  <div className="mt-4">
-                    <span
-                      className="font-weight-bold"
-                      style={{ color: "#974A4A" }}
-                    >
-                      Total : Rp 45.000
-                    </span>
-                  </div>
-                </Col>
-                <Col>
-                  <Row className="d-flex justify-content-end">
-                    <img src="/images/logo.png" />
-                  </Row>
-                  <Row className="mt-4 d-flex justify-content-end ">
-                    <Button className="btn btn-success">Finished</Button>
-                  </Row>
-                </Col>
-              </Row>
-              <Row className="bg-white p-2 rounded my-2">
-                <Col>
-                  <div>
-                    <span className="h5">Geprek Bensu</span>
-                  </div>
-                  <div>
-                    <span>
-                      <span className="font-weight-bold">Saturday,</span> 12
-                      march 2021
-                    </span>
-                  </div>
-                  <div className="mt-4">
-                    <span
-                      className="font-weight-bold"
-                      style={{ color: "#974A4A" }}
-                    >
-                      Total : Rp 45.000
-                    </span>
-                  </div>
-                </Col>
-                <Col>
-                  <Row className="d-flex justify-content-end">
-                    <img src="/images/logo.png" />
-                  </Row>
-                  <Row className="mt-4 d-flex justify-content-end ">
-                    <Button className="btn btn-success">Finished</Button>
-                  </Row>
-                </Col>
-              </Row>
+              {state.transaction != null ? (
+                state.transaction.map((tr) => {
+                  return (
+                    <Row className="bg-white p-2 rounded my-2">
+                      <Col>
+                        <div>
+                          
+                            {user.role == 1 ? (
+                              <span className="h5">
+                              {tr.nameSeller}
+                              </span>
+                            ) : (
+                              <span className="h5">
+                              {tr.nameCustomer}
+                              </span>
+                            )}
+                          
+                        </div>
+                        <div>
+                          <span>{tr.date}</span>
+                        </div>
+                        <div className="mt-4">
+                          <span
+                            className="font-weight-bold"
+                            style={{ color: "#974A4A" }}
+                          >
+                            Total : {formatRupiah(tr.total)}
+                          </span>
+                        </div>
+                      </Col>
+                      <Col>
+                        <Row className="d-flex justify-content-end">
+                          <img src="/images/logo.png" />
+                        </Row>
+                        <Row className="mt-4 d-flex justify-content-end ">
+                          <Button
+                            variant="light"
+                            className="bg-finish btn text-success font-weight-normal disabled"
+                          >
+                            Finished
+                          </Button>
+                        </Row>
+                      </Col>
+                    </Row>
+                  );
+                })
+              ) : (
+                <Row>data kosong</Row>
+              )}
             </Col>
           </Row>
         </div>

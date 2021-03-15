@@ -20,11 +20,11 @@ function Map() {
   const [zoom, setZoom] = useState(9);
 
   useEffect(() => {
+    // console.log(latitude)
     var map = new mapboxgl.Map({
       container: mapContainer.current,
-
       style: "mapbox://styles/mapbox/streets-v11",
-      center: [-79.4512, 43.6568],
+      center: [lng, lat],
       zoom: 13,
     });
 
@@ -62,7 +62,8 @@ function Map() {
 
   return (
     <div>
-      <div className="map-container" ref={mapContainer} />
+      <div className="map-container" ref={mapContainer}>
+      </div>
     </div>
   );
 }
