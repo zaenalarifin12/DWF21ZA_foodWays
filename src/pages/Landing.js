@@ -1,17 +1,18 @@
-import React, { useState } from "react";
-import Header from "../parts/Header";
-import Hero from "../parts/Hero";
+import React, { useState, useEffect } from "react";
+import Header from "../components/Header";
+import Hero from "../components/Hero";
 import CardProductRestaurant from "../components/CardProductRestaurant";
 import CardRestaurant from "../components/CardRestaurant";
 import { withRouter, Link } from "react-router-dom";
-import { sellers, restaurantNear } from "../data/users";
+import sellers from "../data/sellers.json";
+import restaurantNear from "../data/restaurantNear.json";
+import Fade from "react-reveal/Fade";
 
 function Landing() {
   const [sellersList, setSellersList] = useState(sellers);
 
   const [restaurantNearList, setRestaurantNearList] = useState(restaurantNear);
 
-  
   return (
     <div className="bg-warning">
       <Header />
@@ -33,10 +34,12 @@ function Landing() {
                       textDecoration: "none",
                     }}
                   >
-                    <CardRestaurant
-                      src={seller.image}
-                      name={seller.fullname}
-                    ></CardRestaurant>
+                    <Fade left delay={500 * seller.id}>
+                      <CardRestaurant
+                        src={seller.image}
+                        name={seller.fullname}
+                      ></CardRestaurant>
+                    </Fade>
                   </Link>
                 );
               })}
@@ -57,11 +60,13 @@ function Landing() {
                       textDecoration: "none",
                     }}
                   >
-                    <CardProductRestaurant
-                      src={seller.image}
-                      name={seller.name}
-                      distance={seller.distance}
-                    />
+                    <Fade bottom delay={500 * seller.id}>
+                      <CardProductRestaurant
+                        src={seller.image}
+                        name={seller.name}
+                        distance={seller.distance}
+                      />
+                    </Fade>
                   </Link>
                 );
               })}

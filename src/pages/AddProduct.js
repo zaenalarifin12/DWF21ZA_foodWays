@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useReducer, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 
-import Header from "./../parts/Header";
+import Header from "../components/Header";
 import { Input, Button, Form, Row, Col } from "react-bootstrap";
-import ModalMap from "../parts/ModalMap";
+import ModalMap from "../components/ModalMap";
 import SweetAlert from "react-bootstrap-sweetalert";
 
 function AddProduct(props) {

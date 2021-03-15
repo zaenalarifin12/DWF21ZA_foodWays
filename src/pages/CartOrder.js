@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useReducer, useContext } from "react";
 import { useParams, Link, Redirect, useHistory } from "react-router-dom";
 
-import Header from "./../parts/Header";
+import Header from "../components/Header";
 import { Input, Button, Form, Row, Col } from "react-bootstrap";
-import ModalMap from "../parts/ModalMap";
+import ModalMap from "../components/ModalMap";
 import { CountCartContext } from "../context/CountCartContext";
 import {
   ADD_ORDER_TRANSACTION,
@@ -11,7 +11,7 @@ import {
   INCREMENT_FOOD,
   REMOVE_FOOD,
 } from "../config/Constants";
-import CartEmpty from "../parts/EmptyCart";
+import CartEmpty from "../components/EmptyCart";
 import SweetAlert from "react-bootstrap-sweetalert";
 import { formatRupiah } from "../utils/formatRupiah";
 import AddProduct from "./AddProduct";

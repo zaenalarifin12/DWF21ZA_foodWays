@@ -4,7 +4,7 @@ import { formatRupiah } from "../../utils/formatRupiah";
 
 function CardDetailProductRestaurant(props) {
   return (
-    <div className="col-3">
+    
       <div className="card mb-3">
         <img src={props.src} className="p-2" alt={props.name} />
         <div className="card-body">
@@ -21,7 +21,7 @@ function CardDetailProductRestaurant(props) {
             Order
           </Button>
         </div>
-      </div>
+    
     </div>
   );
 }

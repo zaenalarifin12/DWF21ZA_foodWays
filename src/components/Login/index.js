@@ -47,7 +47,7 @@ function Login(props) {
       <Modal
         show={props.show}
         onHide={props.onHide}
-        size="md"
+        size="sm"
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >

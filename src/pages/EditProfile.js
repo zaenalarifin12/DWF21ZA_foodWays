@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useReducer, useContext } from "react";
 import { useParams, Link, useHistory } from "react-router-dom";
 
-import Header from "./../parts/Header";
+import Header from "../components/Header";
 import { Input, Button, Form, Row, Col } from "react-bootstrap";
 
 import SweetAlert from "react-bootstrap-sweetalert";
-import ModalMap from "../parts/ModalMap";
+import ModalMap from "../components/ModalMap";
 
 function EditProfile(props) {
   let history = useHistory();

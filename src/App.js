@@ -12,13 +12,16 @@ import PrivateRoute from "./PrivateRoute";
 import Landing from "./pages/Landing";
 import RestaurantMenu from "./pages/RestaurantMenu";
 import CartOrder from "./pages/CartOrder";
-import Map from "./parts/Map";
+import Map from "./components/Map";
 import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
 import AddProduct from "./pages/AddProduct";
 import Transaction from "./pages/Transaction";
 import { ModalAuthContextProvider } from "./context/ModalAuthContext";
 import GuardRoute from "./GuardRoute";
+
+import 'mapbox-gl/dist/mapbox-gl.css';
+
 
 function App() {
   const user = JSON.parse(localStorage.getItem("user"));

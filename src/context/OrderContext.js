@@ -36,19 +36,19 @@ const reducer = (state, action) => {
   switch (action.type) {
     case ADD_ORDER_TRANSACTION:
       let today = new Date();
-      let add_transaction = {
-        id: Math.random().toString(36).substring(7),
-        nameSeller: action.payload.nameSeller,
-        nameCustomer: action.payload.nameCustomer,
-        address: action.payload.address,
-        date: new Date(today).toUTCString(),
-        product_order: [action.payload.product_order],
-        total: action.payload.total,
-        status: 1,
-      };
+      // let add_transaction = {
+      //   id: Math.random().toString(36).substring(7),
+      //   nameSeller: action.payload.nameSeller,
+      //   nameCustomer: action.payload.nameCustomer,
+      //   address: action.payload.address,
+      //   date: new Date(today).toUTCString(),
+      //   product_order: [action.payload.product_order],
+      //   total: action.payload.total,
+      //   status: 1,
+      // };
 
       return {
-        transaction: [...state.transaction, add_transaction],
+        transaction: state.transaction,
       };
 
     default:

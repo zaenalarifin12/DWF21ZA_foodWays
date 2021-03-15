@@ -3,7 +3,7 @@ import Login from "../Login";
 import Register from "../Register";
 import { Button, OverlayTrigger, Popover } from "react-bootstrap";
 import { withRouter } from "react-router";
-import Cart from "./../../components/Cart";
+import Cart from "../Cart";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { CLEAR_FOOD, HIDE_MODAL_AUTH_ALL, HIDE_MODAL_LOGIN, LOGOUT, SHOW_MODAL_LOGIN, SHOW_MODAL_REGISTER, HIDE_MODAL_REGISTER } from "../../config/Constants";
@@ -66,7 +66,7 @@ function Header(props) {
   };
 
   return (
-    <div className="d-flex flex-column flex-md-row align-items-center p-3 px-md-5 mb-1">
+    <div className="d-flex flex-column flex-md-row align-items-center p-3 px-md-5">
       <h5 className="my-0 mr-md-auto font-weight-normal">
         <Link to={`/`}>
           <img src="/images/logo.png" />

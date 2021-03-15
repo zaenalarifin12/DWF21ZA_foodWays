@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, Route, Redirect } from "react-router-dom";
-import Login from "./parts/Login";
+import Login from "./components/Login";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const [modalLoginShow, setModalLoginShow] = React.useState(true);

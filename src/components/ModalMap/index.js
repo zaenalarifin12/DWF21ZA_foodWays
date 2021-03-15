@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
 
-import Map from "../Map/";
+import Map from "../Map";
 
 const ModalMap = (props) => {
   return (
@@ -12,7 +12,7 @@ const ModalMap = (props) => {
       centered
     >
       <Modal.Body style={{padding:0}}>
-        <div style={{ height:800}}>
+        <div>
           <Map />
         </div>
       </Modal.Body>
