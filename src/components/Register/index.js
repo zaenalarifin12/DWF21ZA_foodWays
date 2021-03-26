@@ -1,21 +1,23 @@
-import React, {useState, useContext} from "react";
+import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { Modal, Button, Form } from "react-bootstrap";
 import { AuthContext } from "../../context/AuthContext";
-import { REGISTER } from "../../config/Constants";
+import { AUTH_ERROR, HIDE_MODAL_AUTH_ALL, REGISTER } from "../../config/Constants";
+import { API, setAuthToken } from "../../config/api";
+import { ModalAuthContext } from "../../context/ModalAuthContext";
 function Register(props) {
   let history = useHistory();
 
-  const { dispatch } = useContext(AuthContext);
+  const [state, dispatch] = useContext(AuthContext);
+  const [stateAuthModal, dispatchAuthModal] = useContext(ModalAuthContext);
 
   const initialState = {
     email: "",
     password: "",
-    fullname: "",
+    fullName: "",
     gender: "",
     phone: "",
     role: "",
-    isSubmiting: false,
   };
 
   const [data, setData] = useState(initialState);
@@ -27,24 +29,44 @@ function Register(props) {
     });
   };
 
-  const handleFormSubmit = (event) => {
-    event.preventDefault();
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
     setData({
       ...data,
-      isSubmiting: true,
     });
 
-    const user = { ...data, token: "12341234" };
+    try {
+      const config = {
+        headers : {
+          "Content-Type" : "application/json"
+        }
+      }
 
-    dispatch({
-      type: REGISTER,
-      payload: { user: user, token: "12341234" },
-    });
+      const body = JSON.stringify(data);
 
-    if (user.role == 1) {
-      history.push("/");
-    } else {
-      history.push("/transaction");
+      const response = await API.post("/register", body, config)
+
+      dispatch({
+        type: REGISTER,
+        payload: response.data.data.user
+      })
+
+      setAuthToken(response.data.data.user.token)
+
+      dispatchAuthModal({
+        type: HIDE_MODAL_AUTH_ALL
+      })      
+
+      if (response.data.data.user.role == "customer") {
+        history.push("/");
+      } else {
+        history.push("/transaction");
+      }
+
+    } catch (error) {
+      dispatch({
+        type:AUTH_ERROR,
+      })
     }
   };
 
@@ -62,7 +84,7 @@ function Register(props) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form>
+        <Form onSubmit={(e) => handleFormSubmit(e)}>
           <Form.Group>
             <Form.Control
               className="border border-choco bg-light"
@@ -87,10 +109,10 @@ function Register(props) {
             <Form.Control
               className="border border-choco bg-light"
               type="text"
-              name="fullname"
-              value={data.fullname}
+              name="fullName"
+              value={data.fullName}
               onChange={handleInputChange}
-              placeholder="Fullname"
+              placeholder="FullName"
             />
           </Form.Group>
           <Form.Group>
@@ -114,20 +136,24 @@ function Register(props) {
             />
           </Form.Group>
           <Form.Group controlId="exampleForm.ControlSelect1">
-            <Form.Control as="select" className="border border-choco bg-light"
-            name="role"
-            onChange={handleInputChange}
+            <Form.Control
+              as="select"
+              className="border border-choco bg-light"
+              name="role"
+              onChange={handleInputChange}
             >
               <option disabled selected>
                 As User
               </option>
-              <option value="1">Customer</option>
-              <option value="2">Restaurant</option>
+              <option value="customer">Customer</option>
+              <option value="partner">Restaurant</option>
             </Form.Control>
           </Form.Group>
 
           <div className="mt-5"></div>
-          <Button onClick={handleFormSubmit} className="btn-block btn-choco">Register</Button>
+          <Button type="submit" className="btn-block btn-choco">
+            Register
+          </Button>
         </Form>
 
         <p className="text-secondary text-center mt-2">

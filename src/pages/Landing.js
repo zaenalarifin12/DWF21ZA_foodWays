@@ -7,11 +7,22 @@ import { withRouter, Link } from "react-router-dom";
 import sellers from "../data/sellers.json";
 import restaurantNear from "../data/restaurantNear.json";
 import Fade from "react-reveal/Fade";
+import { useQuery } from "react-query";
+import { API } from "../config/api";
 
 function Landing() {
   const [sellersList, setSellersList] = useState(sellers);
 
   const [restaurantNearList, setRestaurantNearList] = useState(restaurantNear);
+
+  const { data: userData, loading, error, refetch } = useQuery(
+    "sellerCache",
+    async () => {
+      const response = await API.get("/users?role=partner");
+
+      return response;
+    }
+  );
 
   return (
     <div className="bg-warning">
@@ -50,21 +61,21 @@ function Landing() {
           <h3 className="h4">Restaurant Near You</h3>
           <div className="mt-4">
             <div className="row">
-              {restaurantNearList.map((seller) => {
+              {userData?.data?.data?.users?.map((user, index) => {
                 return (
                   <Link
-                    key={seller.id}
-                    to={`/restaurant/${seller.id}/food`}
+                    key={user.id}
+                    to={`/restaurant/${user.id}/food`}
                     className="col-3"
                     style={{
                       textDecoration: "none",
                     }}
                   >
-                    <Fade bottom delay={500 * seller.id}>
+                    <Fade bottom delay={500 * index}>
                       <CardProductRestaurant
-                        src={seller.image}
-                        name={seller.name}
-                        distance={seller.distance}
+                        src={user.image}
+                        name={user.fullName}
+                        distance={55}
                       />
                     </Fade>
                   </Link>

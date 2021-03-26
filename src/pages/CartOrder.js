@@ -16,18 +16,56 @@ import SweetAlert from "react-bootstrap-sweetalert";
 import { formatRupiah } from "../utils/formatRupiah";
 import AddProduct from "./AddProduct";
 import { OrderContext } from "../context/OrderContext";
+import { useMutation, useQuery } from "react-query";
+import { API } from "../config/api";
+import MapWithCardBottom from "../components/MapWithCardBottom";
+import { MapContext } from "../context/MapContext";
+import MapTransaction from "../components/MapTransaction";
 
 function CartOrder(props) {
   let history = useHistory();
 
   const [modalMapShow, setModalMapShow] = useState(false);
 
+  const [modalMapTransactionShow, setModalMapTransactionShow] = useState(false);
+
   const [success, setSuccess] = useState(false);
 
   const [state, dispatch] = useContext(CountCartContext);
+
   const [stateOrder, dispatchOrder] = useContext(OrderContext);
 
-  const user = localStorage.getItem("user")
+  const [stateMap, dispatchMap] = useContext(MapContext);
+
+  const user = localStorage.getItem("user");
+
+  // const { data: userData, loading: userLoading, error: userError, refetch: userRefetch } = useQuery(
+  //   "userPartnerCache",
+  //   async () => {
+  //     const response = await API.get(`/user/${id}`);
+  //     return response;
+  //   }
+  // );
+
+  const editLocation = useMutation(async () => {
+    const body = JSON.stringify({
+      location: stateMap.longtitude + "," + stateMap.latitude,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    await API.patch("/userLocation", body, config);
+  });
+
+  const hideModalMapOrder = () => {
+    editLocation.mutate();
+    
+    setModalMapShow(false);
+  };
 
   const handleOrder = () => {
     setSuccess(true);
@@ -47,7 +85,13 @@ function CartOrder(props) {
     });
   }
 
-  const orderProduct = (nameSeller, nameCustomer, address, product_order, alltotal) => {
+  const orderProduct = (
+    nameSeller,
+    nameCustomer,
+    address,
+    product_order,
+    alltotal
+  ) => {
     dispatchOrder({
       type: ADD_ORDER_TRANSACTION,
       payload: {
@@ -55,13 +99,66 @@ function CartOrder(props) {
         nameCustomer: nameCustomer,
         address: address,
         product_order: product_order,
-        total: alltotal
+        total: alltotal,
       },
     });
     setSuccess(true);
+  };
 
-    console.log(state.name)
+  const addTransaction = useMutation(async () => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
 
+    const partnerId = localStorage.getItem("partnerId");
+    const cart = JSON.parse(localStorage.getItem("cart"));
+
+    const thisCart = cart.map((c) => ({
+      id: c.id,
+      qty: c.qty,
+    }));
+
+    // partner id |||| id dan qty produk
+    const body = JSON.stringify({
+      partnerId: partnerId,
+      products: thisCart,
+      address: stateMap.address
+    });
+
+    const response = await API.post("/transaction", body, config);
+
+    localStorage.setItem("transaction", response?.data?.data?.id);
+  });
+
+  const successTransaction = useMutation(async (id) => {
+    const body = JSON.stringify({
+      status: "success",
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    
+    const response = await API.put(`/transaction/${id}`, body, config);
+    
+  });
+
+  const addorderTransaction = (id) => {
+    addTransaction.mutate();
+    successTransaction.mutate(id);
+
+    setModalMapTransactionShow(true);
+  };
+
+  const orderTransaction = (id) => {
+
+    history.push("/profile")
+
+    setModalMapTransactionShow(false);
   };
 
   return (
@@ -105,6 +202,7 @@ function CartOrder(props) {
                           size="lg"
                           className=""
                           type="text"
+                          value={stateMap.name}
                           placeholder="location"
                         />
                       </Form.Group>
@@ -118,9 +216,10 @@ function CartOrder(props) {
                         Select On Map <img src="icons/map.svg" />
                       </Button>
 
-                      <ModalMap
+                      <MapWithCardBottom
                         show={modalMapShow}
-                        onHide={() => setModalMapShow(false)}
+                        // onHide={() => setModalMapShow(false)}
+                        onClickButton={() => hideModalMapOrder()}
                       />
                     </Col>
                   </Row>
@@ -138,13 +237,13 @@ function CartOrder(props) {
                         <>
                           <Row key={food.id}>
                             <Col>
-                              <img src={food.image} />
+                              <img src={food.image} style={{ width: 150 }} />
                             </Col>
                             <Col xs={5}>
-                              <p className="text-choco my-4 h5 font-weight-colder">
+                              <p className="text-choco my-2 h5 font-weight-colder">
                                 {food.name}
                               </p>
-                              <Row className="text-choco my-4 h5 font-weight-colder justify-content-start">
+                              <Row className="text-choco my-2 h5 font-weight-colder justify-content-start">
                                 <Col xs={8}>
                                   <Row>
                                     <Col
@@ -186,7 +285,7 @@ function CartOrder(props) {
                             </Col>
                             <Col>
                               <Col>
-                                <span className="float-right mt-4 mb-2 text-danger">
+                                <span className="float-right mt-2 mb-2 text-danger">
                                   {formatRupiah(food.total)}
                                 </span>{" "}
                               </Col>
@@ -217,7 +316,7 @@ function CartOrder(props) {
                   <Col xs={4}>
                     <hr className="border border-bottom border-choco" />
                     <div>
-                      <Row className="mt-4">
+                      <Row className="mt-2">
                         <Col>
                           <span className="float-left ">SubTotal</span>
                         </Col>
@@ -227,7 +326,7 @@ function CartOrder(props) {
                           </span>
                         </Col>
                       </Row>
-                      <Row className="mt-4">
+                      <Row className="mt-2">
                         <Col>
                           <span className="float-left ">Qty</span>
                         </Col>
@@ -235,7 +334,7 @@ function CartOrder(props) {
                           <span className="float-right">{state.allQty}</span>
                         </Col>
                       </Row>
-                      <Row className="mt-4">
+                      <Row className="mt-2">
                         <Col>
                           <span className="float-left">Ongkir</span>
                         </Col>
@@ -245,8 +344,8 @@ function CartOrder(props) {
                           </span>
                         </Col>
                       </Row>
-                      <hr className="border border-bottom border-choco mt-4" />
-                      <Row className="mt-4">
+                      <hr className="border border-bottom border-choco mt-3" />
+                      <Row className="mt-2">
                         <Col>
                           <span className="float-left text-danger font-weight-bolder ">
                             Total
@@ -268,21 +367,16 @@ function CartOrder(props) {
                 <Row className="d-flex justify-content-end mt-5">
                   <Col xs={4}>
                     <Button
-                      onClick={() =>
-                        orderProduct(
-                          state.name,
-                          user.fullname,
-                          "jakarta",
-                          state.foods,
-                          parseInt(state.subTotalPrice) + 10000
-                          
-                        )
-
-                      }
+                      onClick={() => addorderTransaction()}
                       className="btn btn-choco btn-block"
                     >
                       Order
                     </Button>
+                    <MapTransaction
+                      show={modalMapTransactionShow}
+                      // onHide={() => setModalMapTransactionShow(false)}
+                      onClickButton={() => orderTransaction()}
+                    />
                   </Col>
                 </Row>
               </div>

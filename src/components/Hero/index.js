@@ -8,14 +8,20 @@ function Hero() {
         <div className="row">
           <Fade left delay={100}>
             <div className="col my-auto">
-              <h1>Are You Hungry ?</h1>
-              <h1>Express Home Delivery</h1>
+              <h1 style={{
+                fontFamily: "Times New Roman"
+              }}>Are You Hungry ?</h1>
+              <h1 style={{
+                fontFamily: "Times New Roman"
+              }}>Express Home Delivery</h1>
               <div className="row mt-4">
                 <div className="col">
                   <img width="100%" src="/images/line.png" />
                 </div>
                 <div className="col">
-                  <p>
+                  <p style={{
+                fontFamily: "Times New Roman"
+              }}>
                     Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry. Lorem Ipsum has been the industry's
                     standard dummy text ever since the 1500s.

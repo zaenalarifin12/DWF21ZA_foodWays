@@ -8,11 +8,13 @@ import {
 
 export const CountCartContext = React.createContext();
 
+let partnerId = localStorage.getItem("partner_id");
 let nameSeller = localStorage.getItem("name");
 let foodList = JSON.parse(localStorage.getItem("cart"));
 let countAllQty = localStorage.getItem("allQty");
 let countSubTotalPrice = localStorage.getItem("subTotalPrice");
 const initialState = {
+  partnerId: partnerId ?? 0,
   name: nameSeller ?? "",
   foods: foodList != null ? foodList : [],
   allQty: countAllQty ?? 0,
@@ -47,8 +49,8 @@ const reducer = (state, action) => {
         let subTotalPrice = 0;
         // mapping for get all price and all qty
         updatedFoods.map((food) => {
-          allQty += food.qty;
-          subTotalPrice += food.total;
+          allQty += parseInt(food.qty);
+          subTotalPrice += parseInt(food.total);
         });
 
         let foods = JSON.stringify(updatedFoods);
@@ -76,12 +78,17 @@ const reducer = (state, action) => {
         let subTotalPrice = 0;
         // mapping for get all price and all qty
         [...state.foods, payload].map((food) => {
-          allQty += food.qty;
-          subTotalPrice += food.total;
+          allQty += parseInt(food.qty);
+          subTotalPrice += parseInt(food.total);
         });
+
+        localStorage.setItem("allQty", allQty);
+        localStorage.setItem("subTotalPrice", subTotalPrice);
 
         let nameSeller = action.name 
         localStorage.setItem("name", nameSeller);
+
+        localStorage.setItem("partnerId", action.partnerId);
 
         return {
           name: nameSeller,
@@ -112,7 +119,7 @@ const reducer = (state, action) => {
         // mapping for get all price and all qty
         updatedFoods.map((food) => {
           allQty += food.qty;
-          subTotalPrice += food.total;
+          subTotalPrice += parseInt(food.total);
         });
 
         let foods = JSON.stringify(updatedFoods);
@@ -155,6 +162,7 @@ const reducer = (state, action) => {
 
       if(Object.keys(updatedFoods).length < 1){
         localStorage.removeItem("name");
+        localStorage.removeItem("partnerId");
       }
 
       return {
@@ -168,6 +176,7 @@ const reducer = (state, action) => {
       localStorage.removeItem("cart");
       localStorage.removeItem("allQty");
       localStorage.removeItem("subTotalPrice");
+      localStorage.removeItem("partnerId");
       return {
         foods: [],
       };

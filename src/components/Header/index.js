@@ -1,57 +1,88 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Login from "../Login";
 import Register from "../Register";
 import { Button, OverlayTrigger, Popover } from "react-bootstrap";
-import { withRouter } from "react-router";
+import { useHistory, withRouter } from "react-router";
 import Cart from "../Cart";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-import { CLEAR_FOOD, HIDE_MODAL_AUTH_ALL, HIDE_MODAL_LOGIN, LOGOUT, SHOW_MODAL_LOGIN, SHOW_MODAL_REGISTER, HIDE_MODAL_REGISTER } from "../../config/Constants";
+import {
+  CLEAR_FOOD,
+  HIDE_MODAL_AUTH_ALL,
+  HIDE_MODAL_LOGIN,
+  LOGOUT,
+  SHOW_MODAL_LOGIN,
+  SHOW_MODAL_REGISTER,
+  HIDE_MODAL_REGISTER,
+  AUTH_ERROR,
+} from "../../config/Constants";
 import { CountCartContext } from "../../context/CountCartContext";
 import { ModalAuthContext } from "../../context/ModalAuthContext";
+import { API } from "../../config/api";
 
 function Header(props) {
-  
-  const { dispatch } = useContext(AuthContext);
+  const router = useHistory();
+
+  const [user, setUser] = useState(null);
+
+  const [state, dispatch] = useContext(AuthContext);
 
   const [stateCart, dispatchCart] = useContext(CountCartContext);
 
   const [stateAuthModal, dispatchAuthModal] = useContext(ModalAuthContext);
 
+  const checkAuth = async () => {
+    try {
+      const response = await API.get("/check-auth");
+
+      if (response.status === 401) {
+        dispatch({
+          type: AUTH_ERROR,
+        });
+      }
+
+      setUser(response.data.data.user);
+    } catch (error) {
+      dispatch({
+        type: AUTH_ERROR,
+      });
+    }
+  };
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
   // FUNCTION FOR MODAL AUTH
 
   const hideModalAll = () => {
     dispatchAuthModal({
-      type: HIDE_MODAL_AUTH_ALL
-    }) 
-  }
+      type: HIDE_MODAL_AUTH_ALL,
+    });
+  };
 
   const showModalLogin = () => {
     dispatchAuthModal({
-      type: SHOW_MODAL_LOGIN
-    }) 
-  }
+      type: SHOW_MODAL_LOGIN,
+    });
+  };
 
   const hideModalLogin = () => {
     dispatchAuthModal({
-      type: HIDE_MODAL_LOGIN
-    }) 
-  }
+      type: HIDE_MODAL_LOGIN,
+    });
+  };
 
   const showModalRegister = () => {
     dispatchAuthModal({
-      type: SHOW_MODAL_REGISTER
-    }) 
-  }
+      type: SHOW_MODAL_REGISTER,
+    });
+  };
 
   const hideModalRegister = () => {
     dispatchAuthModal({
-      type: HIDE_MODAL_REGISTER
-    }) 
-  }
-
-  // USER 
-  const user = JSON.parse(localStorage.getItem("user"));
+      type: HIDE_MODAL_REGISTER,
+    });
+  };
 
   const handleLogout = () => {
     dispatch({
@@ -62,7 +93,7 @@ function Header(props) {
       type: CLEAR_FOOD,
     });
 
-    props.history.push("/");
+    router.push("/");
   };
 
   return (
@@ -73,9 +104,9 @@ function Header(props) {
         </Link>
       </h5>
 
-      {user && user.role != null ? (
+      {state.isAuthenticated == true && user && user?.role != null ? (
         <>
-          {user.role == 1 ? (
+          {user?.role == "customer" ? (
             <>
               <Cart />
               <div>
@@ -103,7 +134,7 @@ function Header(props) {
                           </Link>
                         </div>
                         <hr className="border-top" />
-                        <div className="my-2">
+                        <div className="my-2" style={{ cursor: "pointer" }}>
                           <img
                             style={{ width: 30 }}
                             src="/images/logout.png"
@@ -120,10 +151,7 @@ function Header(props) {
                     </Popover>
                   }
                 >
-                  <img
-                    src="/images/profile-img.png"
-                    className=""
-                  />
+                  <img src="/images/profile-img.png" className="" />
                 </OverlayTrigger>
               </div>
             </>
@@ -170,7 +198,7 @@ function Header(props) {
                           </Link>
                         </div>
                         <hr className="border-top" />
-                        <div className="my-2">
+                        <div className="my-2" style={{cursor: "pointer"}}>
                           <img
                             style={{ width: 30 }}
                             src="/images/logout.png"
@@ -187,10 +215,7 @@ function Header(props) {
                     </Popover>
                   }
                 >
-                  <img
-                    src="/images/profile-img.png"
-                    className=""
-                  />
+                  <img src="/images/profile-img.png" className="" />
                 </OverlayTrigger>
               </div>
             </>
@@ -211,10 +236,7 @@ function Header(props) {
             showLogin={showModalLogin}
           />
 
-          <Button
-            className="btn btn-sm btn-choco"
-            onClick={showModalLogin}
-          >
+          <Button className="btn btn-sm btn-choco" onClick={showModalLogin}>
             Login
           </Button>
 

@@ -2,6 +2,7 @@
 export const LOGIN = "LOGIN";
 export const REGISTER = "REGISTER";
 export const LOGOUT = "LOGOUT";
+export const AUTH_ERROR = "AUTH_ERROR";
 
 export const INCREMENT_FOOD = "INCREMENT_FOOD";
 export const DECREMENT_FOOD = "DECREMENT_FOOD";

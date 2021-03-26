@@ -2,18 +2,20 @@ import React, { useState, useContext } from "react";
 import { useHistory, withRouter } from "react-router-dom";
 import { Modal, Button, Form } from "react-bootstrap";
 import { AuthContext } from "../../context/AuthContext";
-import { LOGIN } from "../../config/Constants";
+import { HIDE_MODAL_AUTH_ALL, LOGIN } from "../../config/Constants";
 import Register from "../Register";
+import { API, setAuthToken } from "../../config/api";
+import { ModalAuthContext } from "../../context/ModalAuthContext";
 
 function Login(props) {
   let history = useHistory();
-  
-  const { dispatch } = useContext(AuthContext);
+
+  const [state, dispatch] = useContext(AuthContext);
+  const [stateAuthModal, dispatchAuthModal] = useContext(ModalAuthContext);
 
   const initialState = {
     email: "",
     password: "",
-    isSubmiting: false,
   };
 
   const [data, setData] = useState(initialState);
@@ -25,21 +27,41 @@ function Login(props) {
     });
   };
 
-  const handleFormSubmit = (event) => {
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
     setData({
       ...data,
-      isSubmiting: true,
     });
 
-    const user = { ...data, token: "12341234", role: 1 };
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
 
-    dispatch({
-      type: LOGIN,
-      payload: { user: user, token: "12341234" },
-    });
-    
-    history.push("/");
+      const body = JSON.stringify(data);
+
+      const response = await API.post("/login", body, config);
+
+      dispatch({
+        type: LOGIN,
+        payload: response.data.data.user,
+      });
+
+      setAuthToken(response.data.data.user.token);
+
+      dispatchAuthModal({
+        type: HIDE_MODAL_AUTH_ALL,
+      });
+      
+      history.push("/");
+    } catch (error) {}
+
+    // const user = { ...data, token: "12341234", role: 1 };
+
+    // console.log(user);
+    // history.push("/");
   };
 
   return (
@@ -57,7 +79,7 @@ function Login(props) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={handleFormSubmit}>
+          <Form onSubmit={(e) => handleFormSubmit(e)}>
             <Form.Group>
               <Form.Control
                 className="border border-choco bg-light"
@@ -85,15 +107,17 @@ function Login(props) {
               disabled={data.isSubmiting}
               className="btn-block btn-choco"
             >
-              {data.isSubmiting ? "Loading" : "Login"}
+              Login
             </Button>
           </Form>
 
           <p className="text-secondary text-center mt-2">
             Don't have an account ? Klik{" "}
             <span
-            onClick={props.showRegister}
-            style={{ cursor: "pointer" }} className="font-weight-bold">
+              onClick={props.showRegister}
+              style={{ cursor: "pointer" }}
+              className="font-weight-bold"
+            >
               {" "}
               Here{" "}
             </span>

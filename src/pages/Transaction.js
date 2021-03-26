@@ -4,57 +4,63 @@ import { useParams, Link } from "react-router-dom";
 import Header from "../components/Header";
 import { Input, Button, Form, Row, Col } from "react-bootstrap";
 import ModalMap from "../components/ModalMap";
-   
+import { useMutation, useQuery } from "react-query";
+import { API } from "../config/api";
+
 function Transaction(props) {
-  const initialState = [
-    {
-      no: 1,
-      name: "sugeng no pants",
-      address: "cileungsi",
-      product_order: "Paket geprek, mi geprek",
-      status: 1, //waiting aprove
+  const {
+    data: transactionData,
+    loading: transactionLoading,
+    error: transactionError,
+    refetch: transactionRefetch,
+  } = useQuery(
+    "transactionCache",
+    async () => {
+      const response = await API.get("/my-transactions");
+
+      return response;
     },
     {
-      no: 2,
-      name: "Adi Susongko",
-      address: "cileungsi",
-      product_order: "Paket geprek keju",
-      status: 3, //success
-    },
-    {
-      no: 3,
-      name: "Baskoro",
-      address: "cileungsi",
-      product_order: "Paket Geprek Leleh",
-      status: 2, //cancel
-    },
-    {
-      no: 4,
-      name: "Amin Fatah",
-      address: "cileungsi",
-      product_order: "Mie Ayam Leleh",
-      status: 4, //on the way
-    },
-  ];
+      refetchInterval: 1000,
+    }
+  );
 
-  const [transactions, setTransactions] = useState(initialState);
+  const approve = useMutation(async (id) => {
+    const body = JSON.stringify({
+      status: "on the way",
+    });
 
-  const handleSuccess = (transactionId) => {
-    let update = transactions.map((tr) => 
-      tr.no == transactionId ? {...tr, status: 3} : tr
-    );
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
 
-    setTransactions(update)
+    const response = await API.put(`/transaction/${id}`, body, config);
+    
+  });
 
+  const cancel = useMutation(async (id) => {
+    const body = JSON.stringify({
+      status: "cancel",
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    
+    const response = await API.put(`/transaction/${id}`, body, config);
+    
+  });
+
+  const handleApprove = (id) => {
+    approve.mutate(id);
   };
 
-  const handleCancel = (transactionId) => {
-    let update = transactions.map((tr) => 
-      tr.no == transactionId ? {...tr, status: 2} : tr
-    );
-
-    setTransactions(update)
-
+  const handleCancel = (id) => {
+    cancel.mutate(id);
   };
 
   return (
@@ -90,51 +96,62 @@ function Transaction(props) {
                     </tr>
                   </thead>
                   <tbody style={{ backgroundColor: "white" }}>
-                    {transactions.map((tr) => (
-                      <tr>
-                        <th>{tr.no}</th>
-                        <td>{tr.name}</td>
-                        <td>{tr.address}</td>
-                        <td>{tr.product_order}</td>
+                    {transactionData?.data?.data?.transactions.map(
+                      (tr, index) => (
+                        <tr>
+                          <th>{index + 1}</th>
+                          <td>{tr.userOrder.fullName}</td>
+                          <td>{tr.address}</td>
+                          <td>
+                            {tr.order.map((order, index2) => {
+                              let koma =
+                                tr.order.length - 1 != index2 ? " , " : "";
 
-                        {tr.status == 1 ? (
-                          <td className="text-warning">Waiting Approve</td>
-                        ) : tr.status == 2 ? (
-                          <td className="text-danger">Cancel</td>
-                        ) : tr.status == 3 ? (
-                          <td className="text-success">Success</td>
-                        ) : (
-                          <td className="text-info">Waiting approve</td>
-                        )}
+                              return `${order.title} : qty ${order.qty} ${koma}`;
+                            })}
+                          </td>
 
-                        {tr.status == 1 ? (
-                          <td className="d-flex justify-content-around">
-                            <Button
-                            onClick={() => handleCancel(tr.no) }
-                            className="btn btn-danger btn-sm">
-                              Cancel
-                            </Button>
-                            <Button
-                            onClick={() => handleSuccess(tr.no) }
-                            className="btn btn-teal btn-sm">
-                              Approve
-                            </Button>
-                          </td>
-                        ) : tr.status == 2 ? (
-                          <td className="text-center">
-                            <img src="/icons/cancel.svg" />
-                          </td>
-                        ) : tr.status == 3 ? (
-                          <td className="text-center">
-                            <img src="/icons/success.svg" />
-                          </td>
-                        ) : (
-                          <td className="text-center">
-                            <img src="/icons/success.svg" />
-                          </td>
-                        )}
-                      </tr>
-                    ))}
+                          {tr.status == "waiting approve" ? (
+                            <td className="text-warning">Waiting Approve</td>
+                          ) : tr.status == "cancel" ? (
+                            <td className="text-danger">Cancel</td>
+                          ) : tr.status == "success" ? (
+                            <td className="text-success">Success</td>
+                          ) : (
+                            <td className="text-info">On The Way</td>
+                          )}
+
+                          {tr.status == "waiting approve" ? (
+                            <td className="d-flex justify-content-around">
+                              <Button
+                                onClick={() => handleCancel(tr.id)}
+                                className="btn btn-danger btn-sm mr-4"
+                              >
+                                Cancel
+                              </Button>
+                              <Button
+                                onClick={() => handleApprove(tr.id)}
+                                className="btn btn-teal btn-sm"
+                              >
+                                Approve
+                              </Button>
+                            </td>
+                          ) : tr.status == "cancel" ? (
+                            <td className="text-center">
+                              <img src="/icons/cancel.svg" />
+                            </td>
+                          ) : tr.status == "success" ? (
+                            <td className="text-center">
+                              <img src="/icons/success.svg" />
+                            </td>
+                          ) : (
+                            <td className="text-center">
+                              <img src="/icons/success.svg" />
+                            </td>
+                          )}
+                        </tr>
+                      )
+                    )}
                   </tbody>
                 </table>
               </Row>

@@ -5,11 +5,54 @@ import Header from "../components/Header";
 import { Input, Button, Form, Row, Col } from "react-bootstrap";
 import ModalMap from "../components/ModalMap";
 import SweetAlert from "react-bootstrap-sweetalert";
+import { useMutation } from "react-query";
+import { API } from "../config/api";
 
 function AddProduct(props) {
+  const [form, setForm] = useState({
+    title: "",
+    price: "",
+    image: null,
+  });
+
+  const { title, price, image } = form;
+
   const [success, setSuccess] = useState(false);
 
-  const handleAddProduct = () => {
+  const addProduct = useMutation(async () => {
+    const body = new FormData();
+
+    body.append("title", title);
+    body.append("price", price);
+    body.append("image", image);
+
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    await API.post("/product", body, config);
+
+    setForm({
+      title: "",
+      price: "",
+      image: null,
+    });
+  });
+
+  const onChange = (e) => {
+    const tempForm = { ...form };
+    tempForm[e.target.name] =
+      e.target.type === "file" ? e.target.files[0] : e.target.value;
+
+    setForm(tempForm);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    addProduct.mutate();
+
     setSuccess(true);
   };
 
@@ -22,11 +65,10 @@ function AddProduct(props) {
           success
           title="Produk berhasil ditambah!"
           onConfirm={() => {
-            setSuccess(false)
+            setSuccess(false);
           }}
           timeout={2000}
-        >
-        </SweetAlert>
+        ></SweetAlert>
       ) : (
         <></>
       )}
@@ -48,13 +90,15 @@ function AddProduct(props) {
               </Row>
               <Row>
                 <Col>
-                  <Form>
+                  <Form onSubmit={(e) => handleSubmit(e)}>
                     <Row>
                       <Col xs={8}>
                         <Form.Group>
                           <Form.Control
                             className="border border-choco bg-light"
                             type="text"
+                            name="title"
+                            onChange={(e) => onChange(e)}
                             placeholder="Title"
                           />
                         </Form.Group>
@@ -64,6 +108,8 @@ function AddProduct(props) {
                           <input
                             type="file"
                             class="custom-file-input "
+                            name="image"
+                            onChange={(e) => onChange(e)}
                             id="customFile"
                           />
                           <label
@@ -80,6 +126,8 @@ function AddProduct(props) {
                       <Form.Control
                         className="border border-choco bg-light"
                         type="number"
+                        name="price"
+                        onChange={(e) => onChange(e)}
                         placeholder="Price"
                       />
                     </Form.Group>
@@ -87,7 +135,7 @@ function AddProduct(props) {
                     <div className="mt-5"></div>
 
                     <Button
-                      onClick={handleAddProduct}
+                      type="submit"
                       className="float-right px-5 btn-choco"
                     >
                       Save

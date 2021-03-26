@@ -1,38 +1,43 @@
 import React, { useReducer } from "react";
-import { LOGIN, REGISTER, LOGOUT } from "../config/Constants";
-
+import { LOGIN, REGISTER, LOGOUT, AUTH_ERROR } from "../config/Constants";
 
 export const AuthContext = React.createContext();
 
 const initialState = {
   isAuthenticated: false,
   user: null,
-  token: null,
+  loading: true,
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
     case LOGIN:
-      localStorage.setItem("user", JSON.stringify(action.payload.user));
-      localStorage.setItem("token", JSON.stringify(action.payload.token));
+      localStorage.setItem("token", action.payload.token);
 
       return {
         ...state,
         isAuthenticated: true,
-        user: action.payload.user,
-        token: action.payload.token,
+        user: {
+          email: action.payload.email,
+          fullName: action.payload.fullName,
+        },
+        loading: false,
       };
 
     case REGISTER:
-      localStorage.setItem("user", JSON.stringify(action.payload.user));
-      localStorage.setItem("token", JSON.stringify(action.payload.token));
-
+      
+      localStorage.setItem("token", action.payload.token);
+      
       return {
         ...state,
         isAuthenticated: true,
-        user: action.payload.user,
-        token: action.payload.token,
+        user: {
+          email: action.payload.email,
+          fullName: action.payload.fullName,
+        },
+        loading: false,
       };
+    case AUTH_ERROR:
     case LOGOUT:
       localStorage.clear();
 
@@ -40,7 +45,7 @@ const reducer = (state, action) => {
         ...state,
         isAuthenticated: false,
         user: null,
-        token: null,
+        token: false,
       };
 
     default:
@@ -52,7 +57,7 @@ export const AuthContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
-    <AuthContext.Provider value={{state, dispatch}}>
+    <AuthContext.Provider value={[state, dispatch]}>
       {children}
     </AuthContext.Provider>
   );
