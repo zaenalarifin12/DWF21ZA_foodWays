@@ -13,8 +13,9 @@ let nameSeller = localStorage.getItem("name");
 let foodList = JSON.parse(localStorage.getItem("cart"));
 let countAllQty = localStorage.getItem("allQty");
 let countSubTotalPrice = localStorage.getItem("subTotalPrice");
+
 const initialState = {
-  partnerId: partnerId ?? 0,
+  partnerId: partnerId  ?? 0,
   name: nameSeller ?? "",
   foods: foodList != null ? foodList : [],
   allQty: countAllQty ?? 0,

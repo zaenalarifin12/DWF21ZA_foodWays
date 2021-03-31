@@ -7,6 +7,7 @@ import ModalMap from "../components/ModalMap";
 import { CountCartContext } from "../context/CountCartContext";
 import {
   ADD_ORDER_TRANSACTION,
+  CLEAR_FOOD,
   DECREMENT_FOOD,
   INCREMENT_FOOD,
   REMOVE_FOOD,
@@ -63,7 +64,7 @@ function CartOrder(props) {
 
   const hideModalMapOrder = () => {
     editLocation.mutate();
-    
+
     setModalMapShow(false);
   };
 
@@ -124,7 +125,7 @@ function CartOrder(props) {
     const body = JSON.stringify({
       partnerId: partnerId,
       products: thisCart,
-      address: stateMap.address
+      address: stateMap.address,
     });
 
     const response = await API.post("/transaction", body, config);
@@ -142,21 +143,26 @@ function CartOrder(props) {
         "Content-Type": "application/json",
       },
     };
-    
+
     const response = await API.put(`/transaction/${id}`, body, config);
-    
   });
 
-  const addorderTransaction = (id) => {
+  const addorderTransaction = () => {
     addTransaction.mutate();
-    successTransaction.mutate(id);
 
     setModalMapTransactionShow(true);
   };
 
-  const orderTransaction = (id) => {
+  const orderTransaction = () => {
+    const id = localStorage.getItem("transaction");
 
-    history.push("/profile")
+    successTransaction.mutate(id);
+
+    dispatch({
+      type: CLEAR_FOOD,
+    });
+
+    history.push("/profile");
 
     setModalMapTransactionShow(false);
   };
@@ -241,7 +247,7 @@ function CartOrder(props) {
                             </Col>
                             <Col xs={5}>
                               <p className="text-choco my-2 h5 font-weight-colder">
-                                {food.name}
+                                {food.title}
                               </p>
                               <Row className="text-choco my-2 h5 font-weight-colder justify-content-start">
                                 <Col xs={8}>

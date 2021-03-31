@@ -1,5 +1,6 @@
 import React from "react";
 import { Input, Button, Form, Row, Col } from "react-bootstrap";
+import { AuthContext } from "../../context/AuthContext";
 import { formatRupiah } from "../../utils/formatRupiah";
 
 function CardTransaction({ transaction }) {
@@ -23,12 +24,39 @@ function CardTransaction({ transaction }) {
           <img src="/images/logo.png" />
         </Row>
         <Row className="mt-4 d-flex justify-content-end ">
-          <Button
-            variant="light"
-            className="bg-finish btn text-success font-weight-normal disabled"
-          >
-            Finished
-          </Button>
+          {transaction.status == "waiting approve" ? (
+            <Button
+              variant="light"
+              className=" btn bg-warning text-white font-weight-normal"
+              style={{cursor: "context-menu"}}
+            >
+              Waiting Approve
+            </Button>
+          ) : transaction.status == "cancel" ? (
+            <Button
+              variant="light"
+              className="btn bg-danger text-white font-weight-normal"
+              style={{cursor: "context-menu"}}
+            >
+              Cancel
+            </Button>
+          ) : transaction.status == "success" ? (
+            <Button
+              variant="light"
+              className="btn bg-success text-white font-weight-normal"
+              style={{cursor: "context-menu"}}
+            >
+              Success
+            </Button>
+          ) : (
+            <Button
+              variant="light"
+              className="btn bg-teal text-white font-weight-normal"
+              style={{cursor: "context-menu"}}
+            >
+              On The Way
+            </Button>
+          )}
         </Row>
       </Col>
     </Row>

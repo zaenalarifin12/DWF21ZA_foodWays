@@ -37,7 +37,6 @@ function Transaction(props) {
     };
 
     const response = await API.put(`/transaction/${id}`, body, config);
-    
   });
 
   const cancel = useMutation(async (id) => {
@@ -50,9 +49,8 @@ function Transaction(props) {
         "Content-Type": "application/json",
       },
     };
-    
+
     const response = await API.put(`/transaction/${id}`, body, config);
-    
   });
 
   const handleApprove = (id) => {
@@ -107,7 +105,12 @@ function Transaction(props) {
                               let koma =
                                 tr.order.length - 1 != index2 ? " , " : "";
 
-                              return `${order.title} : qty ${order.qty} ${koma}`;
+                              return (
+                                <p>
+                                  {" "}
+                                  {order.title} : qty {order.qty} {koma}
+                                </p>
+                              );
                             })}
                           </td>
 

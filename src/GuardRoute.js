@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link, Route, Redirect } from "react-router-dom";
 import { API } from "./config/api";
+import { AuthContext } from "./context/AuthContext";
 
 const GuardRoute = ({ component: Component, ...rest }) => {
   // const [user, setUser] = useState(null);
@@ -12,6 +13,8 @@ const GuardRoute = ({ component: Component, ...rest }) => {
   //   } catch (error) {}
   // };
 
+  const [state, dispatch] = useContext(AuthContext);
+
   // useEffect(() => {
   //   checkAuth()
   // }, [])
@@ -19,11 +22,13 @@ const GuardRoute = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={(props) =>
-        // user == null || user?.role == "customer" ? (
+      render={
+        (props) => (
+          // state?.user?.role == "partner" ? (
           <Component {...props} />
+        )
         // ) : (
-        //   <Redirect to="/transaction" />
+        //   <Redirect to="/" />
         // )
       }
     />

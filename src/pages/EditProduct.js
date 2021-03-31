@@ -19,6 +19,9 @@ function AddProduct(props) {
 
   const { title, price, image } = form;
 
+  const params = useParams();
+  const { id } = params;
+
   const [success, setSuccess] = useState(false);
   const [textSuccess, setTextSuccess] = useState("");
 
@@ -28,6 +31,20 @@ function AddProduct(props) {
   // const addProduct = useMutation(async () => {
 
   // });
+
+  const editProduct = async () => {
+    const response = await API.get(`/product/${id}`).then((data) => {
+      setForm({
+        ...form,
+        title: data.response.data.data.user.title,
+        price: data.response.data.data.user.price,
+      });
+    });
+  };
+
+  useEffect(() => {
+    editProduct();
+  }, []);
 
   const onChange = (e) => {
     const tempForm = { ...form };
@@ -61,10 +78,9 @@ function AddProduct(props) {
         .catch((error) => {
           if (error.response.status == 400) {
             setModalError(true);
-            setTextError(error.response.data.error.message)
+            setTextError(error.response.data.error.message);
           }
         });
-
     } catch (error) {
       console.log(error);
     }
@@ -125,6 +141,7 @@ function AddProduct(props) {
                             className="border border-choco bg-light"
                             type="text"
                             name="title"
+                            value={title}
                             onChange={(e) => onChange(e)}
                             placeholder="Title"
                           />
@@ -136,6 +153,7 @@ function AddProduct(props) {
                             type="file"
                             class="custom-file-input "
                             id="customFile"
+                            value={price}
                             onChange={(e) => onChange(e)}
                             name="image"
                           />

@@ -14,7 +14,12 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
           <Component {...props} />
         ) : (
           <>
-            <Redirect to={`/`} />
+            <Link to="/">
+              <Login
+                show={modalLoginShow}
+                onHide={() => setModalLoginShow(false)}
+              />
+            </Link>
           </>
         )
       }

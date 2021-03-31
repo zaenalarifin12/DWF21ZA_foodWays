@@ -9,6 +9,7 @@ import { formatRupiah } from "../utils/formatRupiah";
 import CardTransaction from "../components/CardTransaction";
 import { useQuery } from "react-query";
 import { API } from "../config/api";
+import Fade from "react-reveal/Fade";
 
 function Profile(props) {
   const [state, dispatch] = useContext(OrderContext);
@@ -31,22 +32,20 @@ function Profile(props) {
     transactionRefetch,
   } = useQuery("myTransactionCache", async () => {
     const response = await API.get("/my-transactions");
-    
-    return response
-    
+
+    return response;
   });
 
   return (
-    <div className="bg-warning">
+    <div
+      style={{
+        backgroundColor: "#E5E5E5",
+        minHeight: "100vh",
+      }}
+    >
       <Header />
 
-      <div
-        className=""
-        style={{
-          backgroundColor: "#E5E5E5",
-          height: "100vh",
-        }}
-      >
+      <div>
         <div className="container pt-5">
           <Row>
             {loading ? (
@@ -56,17 +55,18 @@ function Profile(props) {
                 <Row>
                   <Col>
                     <h1 className="h3 ">
-                      {user?.role == "user" ? "My Profile" : "Profile Partner"}
+                      {user?.role == "customer"
+                        ? "My Profile"
+                        : "Profile Partner"}
                     </h1>
                   </Col>
                 </Row>
                 <Row className="float-left">
                   <Col>
                     <img
-                      src="/images/profile.png"
-                      height="222"
+                      src={user?.image ?? "/images/default.png"}
                       className="rounded"
-                      style={{ objectFit: "cover" }}
+                      style={{ objectFit: "cover", height: 222, width: 180 }}
                     />
                     <Link
                       to={`/edit-profile`}
@@ -116,9 +116,15 @@ function Profile(props) {
                 <h1 className="h3 ">History Transaction</h1>
               </Row>
               {transactionData?.data?.data?.transactions != null ? (
-                transactionData?.data?.data?.transactions.map((transaction) => {
-                  return <CardTransaction transaction={transaction} />;
-                })
+                transactionData?.data?.data?.transactions.map(
+                  (transaction, index) => {
+                    return (
+                      <Fade right delay={500 * index}>
+                        <CardTransaction transaction={transaction} />
+                      </Fade>
+                    );
+                  }
+                )
               ) : (
                 <Row>data kosong</Row>
               )}

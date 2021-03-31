@@ -20,6 +20,7 @@ const reducer = (state, action) => {
         user: {
           email: action.payload.email,
           fullName: action.payload.fullName,
+          role: action.payload.role,
         },
         loading: false,
       };
@@ -34,6 +35,7 @@ const reducer = (state, action) => {
         user: {
           email: action.payload.email,
           fullName: action.payload.fullName,
+          role: action.payload.role,
         },
         loading: false,
       };

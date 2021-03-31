@@ -28,7 +28,7 @@ function ControlPanel(props) {
       return response;
     },
     {
-      refetchInterval: 5000,
+      refetchInterval: 1000,
     }
   );
 
@@ -56,13 +56,14 @@ function ControlPanel(props) {
           <p>{props.time}</p>
           {data?.data.data?.transaction?.status == "on the way" ? (
             <Button
-            onClick={props.onClickButton}
-            className="btn btn-sm btn-choco btn-block font-weight-bold"
-          >
-            Finished Order
-          </Button>
-          ) : (<></>)}
-          
+              onClick={props.onClickButton}
+              className="btn btn-sm btn-choco btn-block font-weight-bold"
+            >
+              Finished Order
+            </Button>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </div>

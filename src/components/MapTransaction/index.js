@@ -46,7 +46,7 @@ function MapTransaction(props) {
     pitch: 0,
   });
   const [stateMap, dispatchMap] = useContext(MapContext);
-  
+
   const [marker, setMarker] = useState({
     latitude: -7.005396,
     longitude: 110.402295,
@@ -65,7 +65,7 @@ function MapTransaction(props) {
 
   const [partner, setPartner] = useState(null);
 
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null);
 
   const {
     data: partnerData,
@@ -84,17 +84,19 @@ function MapTransaction(props) {
     loading: userLoading,
     error: userError,
     refetch: userRefetch,
-  } = useQuery("userDatalocation", async () => {
-    
-    const response = await API.get(`/check-auth`);
+  } = useQuery(
+    "userDatalocation",
+    async () => {
+      const response = await API.get(`/check-auth`);
 
-    setUser(response?.data?.data?.user);
-    getLocation()
-  },
-  {
-    // Refetch the data every second
-    refetchInterval: 5000,
-  });
+      setUser(response?.data?.data?.user);
+      getLocation();
+    },
+    {
+      // Refetch the data every second
+      refetchInterval: 1000,
+    }
+  );
 
   const getLocation = async () => {
     let location1 = user?.location;
@@ -104,6 +106,8 @@ function MapTransaction(props) {
       `https://api.mapbox.com/directions/v5/mapbox/driving/${location1};${location2}?alternatives=false&geometries=geojson&steps=false&access_token=${TOKEN}`
     );
 
+    console.log(location1);
+    console.log(location2);
     setMarker({
       latitude: response.data.waypoints[0].location[1],
       longitude: response.data.waypoints[0].location[0],
@@ -121,7 +125,7 @@ function MapTransaction(props) {
 
   // useEffect(() => {
   //   getLocation();
-    
+
   // }, []);
 
   const geolocateControlStyle = {
@@ -170,8 +174,10 @@ function MapTransaction(props) {
                 <NavigationControl />
               </div>
               <ControlPanel
-              onClickButton={props.onClickButton}
-              time={time} events={events} />
+                onClickButton={props.onClickButton}
+                time={time}
+                events={events}
+              />
             </ReactMapGL>
           </div>
         </div>

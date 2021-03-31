@@ -1,6 +1,3 @@
-*{
-  font-family: 'Times New Roman', Times, serif;
-}
 
 $white: #fff !default;
 $gray-100: #f8f9fa !default;
@@ -98,6 +95,7 @@ $theme-colors: map-merge(
   border-radius: 2px;
   border-style: "none";
 }
+
 textarea:hover, 
 input:hover, 
 textarea:active, 

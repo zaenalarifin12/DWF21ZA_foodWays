@@ -19,30 +19,31 @@ function RestaurantMenu(props) {
   const params = useParams();
   const { id } = params;
 
-  const { data: userData, loading: userLoading, error: userError, refetch: userRefetch } = useQuery(
-    "userPartnerCache",
-    async () => {
-      const response = await API.get(`/user/${id}`);
-      return response;
-    }
-  );
-
+  const {
+    data: userData,
+    loading: userLoading,
+    error: userError,
+    refetch: userRefetch,
+  } = useQuery("userPartnerCache", async () => {
+    const response = await API.get(`/user/${id}`);
+    return response;
+  });
 
   const { data: productData, loading, error, refetch } = useQuery(
     "productCache",
     async () => {
       const response = await API.get(`/products/${id}`);
-      
+
       return response;
     }
   );
 
   return (
     // <CountCartContextProvider>
-    <div className="bg-warning">
+    <div style={{ backgroundColor: "#E5E5E5", minHeight: "100vh" }}>
       <Header />
 
-      <div style={{ backgroundColor: "#E5E5E5" }}>
+      <div>
         {/* {count} */}
         <div className="container pt-5 pb-5">
           <h3 className="h4 font-weight-bold">

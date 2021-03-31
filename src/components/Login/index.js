@@ -6,6 +6,7 @@ import { HIDE_MODAL_AUTH_ALL, LOGIN } from "../../config/Constants";
 import Register from "../Register";
 import { API, setAuthToken } from "../../config/api";
 import { ModalAuthContext } from "../../context/ModalAuthContext";
+import SweetAlert from "react-bootstrap-sweetalert";
 
 function Login(props) {
   let history = useHistory();
@@ -19,6 +20,7 @@ function Login(props) {
   };
 
   const [data, setData] = useState(initialState);
+  const [modalError, setmodalError] = useState(false);
 
   const handleInputChange = (event) => {
     setData({
@@ -26,6 +28,8 @@ function Login(props) {
       [event.target.name]: event.target.value,
     });
   };
+
+  const [textError, setTextError] = useState("");
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -42,7 +46,21 @@ function Login(props) {
 
       const body = JSON.stringify(data);
 
-      const response = await API.post("/login", body, config);
+      const response = await API.post("/login", body, config).catch((error) => {
+        if (error.response.status == 400) {
+          setmodalError(true);
+          setTextError(error.response.data.error.message);
+        }
+
+        if (error.response.status == 404) {
+          setmodalError(true);
+          setTextError(error.response.data.message);
+        }
+        if (error.response.status == 401) {
+          setmodalError(true);
+          setTextError(error.response.data.message);
+        }
+      });
 
       dispatch({
         type: LOGIN,
@@ -54,8 +72,12 @@ function Login(props) {
       dispatchAuthModal({
         type: HIDE_MODAL_AUTH_ALL,
       });
-      
-      history.push("/");
+
+      if (response.data.data.user.role == "customer") {
+        history.push("/");
+      } else {
+        history.push("/transaction");
+      }
     } catch (error) {}
 
     // const user = { ...data, token: "12341234", role: 1 };
@@ -66,6 +88,19 @@ function Login(props) {
 
   return (
     <>
+      {modalError ? (
+        <>
+          <SweetAlert
+            danger
+            title={textError}
+            onConfirm={() => setmodalError(false)}
+            timeout={100000}
+          ></SweetAlert>
+        </>
+      ) : (
+        <></>
+      )}
+
       <Modal
         show={props.show}
         onHide={props.onHide}

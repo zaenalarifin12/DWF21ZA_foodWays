@@ -97,6 +97,7 @@ const App = () => {
                     />
                     <PrivateRoute path="/products" component={ListProduct} />
                     <PrivateRoute path="/add-product" component={AddProduct} />
+                    <PrivateRoute path="/my-products" component={ListProduct} />
                     <PrivateRoute path="/transaction" component={Transaction} />
                   </Switch>
                 </Router>

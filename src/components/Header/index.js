@@ -97,16 +97,30 @@ function Header(props) {
   };
 
   return (
-    <div className="d-flex flex-column flex-md-row align-items-center p-3 px-md-5">
+    <div className="bg-warning d-flex flex-column flex-md-row align-items-center p-3 px-md-5">
       <h5 className="my-0 mr-md-auto font-weight-normal">
-        <Link to={`/`}>
-          <img src="/images/logo.png" />
-        </Link>
+        {state.isAuthenticated ? (
+          <>
+            {state.user.role == "partner" ? (
+              <Link to={`/transaction`}>
+                <img src="/images/logo.png" />
+              </Link>
+            ) : (
+              <Link to={`/`}>
+                <img src="/images/logo.png" />
+              </Link>
+            )}
+          </>
+        ) : (
+          <Link to={`/`}>
+            <img src="/images/logo.png" />
+          </Link>
+        )}
       </h5>
 
-      {state.isAuthenticated == true && user && user?.role != null ? (
+      {state.isAuthenticated ? (
         <>
-          {user?.role == "customer" ? (
+          {state.user.role == "customer" ? (
             <>
               <Cart />
               <div>
@@ -151,7 +165,11 @@ function Header(props) {
                     </Popover>
                   }
                 >
-                  <img src="/images/profile-img.png" className="" />
+                  <img
+                    src={user?.image ?? "/images/default.png"}
+                    className="rounded-circle"
+                    style={{ width: 60, height: 60, objectFit: "cover" }}
+                  />
                 </OverlayTrigger>
               </div>
             </>
@@ -183,7 +201,7 @@ function Header(props) {
                         </div>
                         <div className="my-2 ">
                           <Link
-                            to={`/add-product`}
+                            to={`/my-products`}
                             className="d-flex  align-items-center"
                             style={{ textDecoration: "none" }}
                           >
@@ -193,12 +211,12 @@ function Header(props) {
                               className="mr-2"
                             />
                             <span className="text-choco font-weight-bold">
-                              Add Product
+                              List Products
                             </span>
                           </Link>
                         </div>
                         <hr className="border-top" />
-                        <div className="my-2" style={{cursor: "pointer"}}>
+                        <div className="my-2" style={{ cursor: "pointer" }}>
                           <img
                             style={{ width: 30 }}
                             src="/images/logout.png"
@@ -215,7 +233,11 @@ function Header(props) {
                     </Popover>
                   }
                 >
-                  <img src="/images/profile-img.png" className="" />
+                  <img
+                    src={user?.image ?? "/images/default.png"}
+                    className="rounded-circle"
+                    style={{ width: 60, height: 60, objectFit: "cover" }}
+                  />
                 </OverlayTrigger>
               </div>
             </>
