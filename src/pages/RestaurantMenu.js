@@ -54,7 +54,7 @@ function RestaurantMenu(props) {
               {productData?.data?.data?.products?.map((food, index) => {
                 return (
                   <Fade top delay={400 * index}>
-                    <div className="col-3">
+                    <div className="col-sm-12 col-lg-3 mb-3">
                       <CardDetailProductRestaurant
                         key={food.id}
                         src={food.image}

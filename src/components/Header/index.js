@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import Login from "../Login";
 import Register from "../Register";
-import { Button, OverlayTrigger, Popover } from "react-bootstrap";
+import { Button, Col, OverlayTrigger, Popover, Row } from "react-bootstrap";
 import { useHistory, withRouter } from "react-router";
 import Cart from "../Cart";
 import { Link } from "react-router-dom";
@@ -97,179 +97,188 @@ function Header(props) {
   };
 
   return (
-    <div className="bg-warning d-flex flex-column flex-md-row align-items-center p-3 px-md-5">
-      <h5 className="my-0 mr-md-auto font-weight-normal">
+    <Row className="bg-warning d-flex flex-column flex-md-row align-items-center py-3 p-0 m-0">
+      <Col>
+        <span className="my-0 mr-md-auto font-weight-normal">
+          {state.isAuthenticated ? (
+            <>
+              {state.user.role == "partner" ? (
+                <Link to={`/transaction`}>
+                  <img src="/images/logo.png" width="100" />
+                </Link>
+              ) : (
+                <Link to={`/`}>
+                  <img src="/images/logo.png" width="100" />
+                </Link>
+              )}
+            </>
+          ) : (
+            <Link to={`/`}>
+              <img
+                src="/images/logo.png"
+                style={{
+                  maxWidth: 140,
+                }}
+              />
+            </Link>
+          )}
+        </span>
+      </Col>
+
+      <Col className="d-flex justify-content-end">
         {state.isAuthenticated ? (
           <>
-            {state.user.role == "partner" ? (
-              <Link to={`/transaction`}>
-                <img src="/images/logo.png" />
-              </Link>
+            {state.user.role == "customer" ? (
+              <>
+                <Cart />
+                <div>
+                  <OverlayTrigger
+                    trigger="click"
+                    key="bottom"
+                    placement="bottom"
+                    overlay={
+                      <Popover id={`popover-positioned-bottom`}>
+                        <Popover.Content>
+                          <div className="my-2">
+                            <Link
+                              to={`/profile`}
+                              className="d-flex  align-items-center"
+                              style={{ textDecoration: "none" }}
+                            >
+                              <img
+                                style={{ width: 30 }}
+                                src="/images/user.png"
+                                className="mr-2"
+                              />
+                              <span className="text-choco font-weight-bold">
+                                Profile
+                              </span>
+                            </Link>
+                          </div>
+                          <hr className="border-top" />
+                          <div className="my-2" style={{ cursor: "pointer" }}>
+                            <img
+                              style={{ width: 30 }}
+                              src="/images/logout.png"
+                              className="mr-2"
+                            />
+                            <a
+                              onClick={handleLogout}
+                              className="font-weight-bold text-choco"
+                            >
+                              Logout
+                            </a>
+                          </div>
+                        </Popover.Content>
+                      </Popover>
+                    }
+                  >
+                    <img
+                      src={user?.image ?? "/images/default.png"}
+                      className="rounded-circle"
+                      style={{ width: 60, height: 60, objectFit: "cover" }}
+                    />
+                  </OverlayTrigger>
+                </div>
+              </>
             ) : (
-              <Link to={`/`}>
-                <img src="/images/logo.png" />
-              </Link>
+              <>
+                <div>
+                  <OverlayTrigger
+                    trigger="click"
+                    key="bottom"
+                    placement="bottom"
+                    overlay={
+                      <Popover id={`popover-positioned-bottom`}>
+                        <Popover.Content>
+                          <div className="my-2">
+                            <Link
+                              to={`/profile`}
+                              className="d-flex  align-items-center"
+                              style={{ textDecoration: "none" }}
+                            >
+                              <img
+                                style={{ width: 30 }}
+                                src="/images/user.png"
+                                className="mr-2"
+                              />
+                              <span className="text-choco font-weight-bold">
+                                Profile Partner
+                              </span>
+                            </Link>
+                          </div>
+                          <div className="my-2 ">
+                            <Link
+                              to={`/my-products`}
+                              className="d-flex  align-items-center"
+                              style={{ textDecoration: "none" }}
+                            >
+                              <img
+                                style={{ width: 30 }}
+                                src="/images/add-product.png"
+                                className="mr-2"
+                              />
+                              <span className="text-choco font-weight-bold">
+                                List Products
+                              </span>
+                            </Link>
+                          </div>
+                          <hr className="border-top" />
+                          <div className="my-2" style={{ cursor: "pointer" }}>
+                            <img
+                              style={{ width: 30 }}
+                              src="/images/logout.png"
+                              className="mr-2"
+                            />
+                            <a
+                              onClick={handleLogout}
+                              className="font-weight-bold text-choco"
+                            >
+                              Logout
+                            </a>
+                          </div>
+                        </Popover.Content>
+                      </Popover>
+                    }
+                  >
+                    <img
+                      src={user?.image ?? "/images/default.png"}
+                      className="rounded-circle"
+                      style={{ width: 60, height: 60, objectFit: "cover" }}
+                    />
+                  </OverlayTrigger>
+                </div>
+              </>
             )}
           </>
         ) : (
-          <Link to={`/`}>
-            <img src="/images/logo.png" />
-          </Link>
+          <>
+            <Button
+              className="btn btn-sm btn-choco mr-4 "
+              onClick={showModalRegister}
+            >
+              Register
+            </Button>
+
+            <Register
+              show={stateAuthModal.register}
+              onHide={hideModalAll}
+              showLogin={showModalLogin}
+            />
+
+            <Button className="btn btn-sm btn-choco" onClick={showModalLogin}>
+              Login
+            </Button>
+
+            <Login
+              show={stateAuthModal.login}
+              onHide={hideModalAll}
+              showRegister={showModalRegister}
+            />
+          </>
         )}
-      </h5>
-
-      {state.isAuthenticated ? (
-        <>
-          {state.user.role == "customer" ? (
-            <>
-              <Cart />
-              <div>
-                <OverlayTrigger
-                  trigger="click"
-                  key="bottom"
-                  placement="bottom"
-                  overlay={
-                    <Popover id={`popover-positioned-bottom`}>
-                      <Popover.Content>
-                        <div className="my-2">
-                          <Link
-                            to={`/profile`}
-                            className="d-flex  align-items-center"
-                            style={{ textDecoration: "none" }}
-                          >
-                            <img
-                              style={{ width: 30 }}
-                              src="/images/user.png"
-                              className="mr-2"
-                            />
-                            <span className="text-choco font-weight-bold">
-                              Profile
-                            </span>
-                          </Link>
-                        </div>
-                        <hr className="border-top" />
-                        <div className="my-2" style={{ cursor: "pointer" }}>
-                          <img
-                            style={{ width: 30 }}
-                            src="/images/logout.png"
-                            className="mr-2"
-                          />
-                          <a
-                            onClick={handleLogout}
-                            className="font-weight-bold text-choco"
-                          >
-                            Logout
-                          </a>
-                        </div>
-                      </Popover.Content>
-                    </Popover>
-                  }
-                >
-                  <img
-                    src={user?.image ?? "/images/default.png"}
-                    className="rounded-circle"
-                    style={{ width: 60, height: 60, objectFit: "cover" }}
-                  />
-                </OverlayTrigger>
-              </div>
-            </>
-          ) : (
-            <>
-              <div>
-                <OverlayTrigger
-                  trigger="click"
-                  key="bottom"
-                  placement="bottom"
-                  overlay={
-                    <Popover id={`popover-positioned-bottom`}>
-                      <Popover.Content>
-                        <div className="my-2">
-                          <Link
-                            to={`/profile`}
-                            className="d-flex  align-items-center"
-                            style={{ textDecoration: "none" }}
-                          >
-                            <img
-                              style={{ width: 30 }}
-                              src="/images/user.png"
-                              className="mr-2"
-                            />
-                            <span className="text-choco font-weight-bold">
-                              Profile Partner
-                            </span>
-                          </Link>
-                        </div>
-                        <div className="my-2 ">
-                          <Link
-                            to={`/my-products`}
-                            className="d-flex  align-items-center"
-                            style={{ textDecoration: "none" }}
-                          >
-                            <img
-                              style={{ width: 30 }}
-                              src="/images/add-product.png"
-                              className="mr-2"
-                            />
-                            <span className="text-choco font-weight-bold">
-                              List Products
-                            </span>
-                          </Link>
-                        </div>
-                        <hr className="border-top" />
-                        <div className="my-2" style={{ cursor: "pointer" }}>
-                          <img
-                            style={{ width: 30 }}
-                            src="/images/logout.png"
-                            className="mr-2"
-                          />
-                          <a
-                            onClick={handleLogout}
-                            className="font-weight-bold text-choco"
-                          >
-                            Logout
-                          </a>
-                        </div>
-                      </Popover.Content>
-                    </Popover>
-                  }
-                >
-                  <img
-                    src={user?.image ?? "/images/default.png"}
-                    className="rounded-circle"
-                    style={{ width: 60, height: 60, objectFit: "cover" }}
-                  />
-                </OverlayTrigger>
-              </div>
-            </>
-          )}
-        </>
-      ) : (
-        <>
-          <Button
-            className="btn btn-sm btn-choco mr-4 "
-            onClick={showModalRegister}
-          >
-            Register
-          </Button>
-
-          <Register
-            show={stateAuthModal.register}
-            onHide={hideModalAll}
-            showLogin={showModalLogin}
-          />
-
-          <Button className="btn btn-sm btn-choco" onClick={showModalLogin}>
-            Login
-          </Button>
-
-          <Login
-            show={stateAuthModal.login}
-            onHide={hideModalAll}
-            showRegister={showModalRegister}
-          />
-        </>
-      )}
-    </div>
+      </Col>
+    </Row>
   );
 }
 

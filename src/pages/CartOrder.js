@@ -202,7 +202,7 @@ function CartOrder(props) {
               <div className="">
                 <Form>
                   <Row>
-                    <Col>
+                    <Col sm={12} lg={8}>
                       <Form.Group>
                         <Form.Control
                           size="lg"
@@ -213,7 +213,7 @@ function CartOrder(props) {
                         />
                       </Form.Group>
                     </Col>
-                    <Col xs={3}>
+                    <Col sm={12} lg={4}>
                       <Button
                         onClick={() => setModalMapShow(true)}
                         size="lg"
@@ -232,20 +232,20 @@ function CartOrder(props) {
                 </Form>
               </div>
               <div>
-                <p className="text-choco h5 font-weight-normal">
+                <p className="text-choco h5 font-weight-normal mt-3">
                   Review Your Code
                 </p>
                 <Row>
-                  <Col>
+                  <Col sm={12} lg={8}>
                     <hr className="border border-bottom border-choco" />
                     {state.foods.map((food) => {
                       return (
                         <>
                           <Row key={food.id}>
-                            <Col>
+                            <Col sm={12} lg={4}>
                               <img src={food.image} style={{ width: 150 }} />
                             </Col>
-                            <Col xs={5}>
+                            <Col sm={12} lg={5}>
                               <p className="text-choco my-2 h5 font-weight-colder">
                                 {food.title}
                               </p>
@@ -289,7 +289,7 @@ function CartOrder(props) {
                                 </Col>
                               </Row>
                             </Col>
-                            <Col>
+                            <Col sm={12} lg={3}>
                               <Col>
                                 <span className="float-right mt-2 mb-2 text-danger">
                                   {formatRupiah(food.total)}
@@ -319,7 +319,7 @@ function CartOrder(props) {
                       );
                     })}
                   </Col>
-                  <Col xs={4}>
+                  <Col sm={12} lg={4}>
                     <hr className="border border-bottom border-choco" />
                     <div>
                       <Row className="mt-2">

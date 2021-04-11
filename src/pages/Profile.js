@@ -45,13 +45,13 @@ function Profile(props) {
     >
       <Header />
 
-      <div>
+      <div className="mx-3">
         <div className="container pt-5">
           <Row>
             {loading ? (
               <p>loading</p>
             ) : (
-              <Col>
+              <Col sm={12} lg={7} className="mb-3">
                 <Row>
                   <Col>
                     <h1 className="h3 ">
@@ -111,7 +111,7 @@ function Profile(props) {
               </Col>
             )}
 
-            <Col xs={5}>
+            <Col sm={12} lg={5} >
               <Row>
                 <h1 className="h3 ">History Transaction</h1>
               </Row>

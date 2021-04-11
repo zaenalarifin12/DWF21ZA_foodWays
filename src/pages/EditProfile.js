@@ -81,7 +81,7 @@ function EditProfile(props) {
       const response = await API.put(`/user`, body, config)
         .then((data) => {
           setSuccess(true);
-          console.log("berhasil");
+
           setForm({
             fullName: "",
             password: "",
@@ -95,12 +95,8 @@ function EditProfile(props) {
             setModalError(true);
             setTextError(error.response.data.error.message);
           }
-          console.log(error);
         });
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return (
@@ -130,7 +126,7 @@ function EditProfile(props) {
           onConfirm={() => {
             history.push("/profile");
           }}
-          timeout={5000}
+          timeout={2000}
         ></SweetAlert>
       ) : (
         <></>
@@ -222,7 +218,7 @@ function EditProfile(props) {
                         />
                       </Form.Group>
                       <Row>
-                        <Col xs={9}>
+                        <Col sm={12} lg={9}>
                           <Form.Group>
                             <Form.Control
                               className="border border-choco bg-light"
@@ -234,7 +230,7 @@ function EditProfile(props) {
                             />
                           </Form.Group>
                         </Col>
-                        <Col>
+                        <Col sm={12} lg={3}>
                           <Button
                             onClick={() => setModalMapShow(true)}
                             size="lg"

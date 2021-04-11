@@ -54,7 +54,25 @@ function Register(props) {
 
       const body = JSON.stringify(data);
 
-      const response = await API.post("/register", body, config)
+      await API.post("/register", body, config)
+        .then((res) => {
+          dispatch({
+            type: REGISTER,
+            payload: res.data.data.user,
+          });
+
+          setAuthToken(res.data.data.user.token);
+
+          dispatchAuthModal({
+            type: HIDE_MODAL_AUTH_ALL,
+          });
+
+          if (res.data.data.user.role == "customer") {
+            history.push("/");
+          } else {
+            history.push("/transaction");
+          }
+        })
         .catch((error) => {
           if (error.response.status == 400) {
             setModalError(true);
@@ -65,25 +83,7 @@ function Register(props) {
             setModalError(true);
             setTextError(error.response.data.message);
           }
-        })
-        
-
-      dispatch({
-        type: REGISTER,
-        payload: response.data.data.user,
-      });
-
-      setAuthToken(response.data.data.user.token);
-
-      dispatchAuthModal({
-        type: HIDE_MODAL_AUTH_ALL,
-      });
-
-      if (response.data.data.user.role == "customer") {
-        history.push("/");
-      } else {
-        history.push("/transaction");
-      }
+        });
     } catch (error) {
       dispatch({
         type: AUTH_ERROR,
@@ -105,8 +105,6 @@ function Register(props) {
       ) : (
         <></>
       )}
-
-
 
       <Modal
         show={props.show}

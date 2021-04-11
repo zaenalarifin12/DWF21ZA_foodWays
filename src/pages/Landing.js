@@ -9,6 +9,7 @@ import restaurantNear from "../data/restaurantNear.json";
 import Fade from "react-reveal/Fade";
 import { useQuery } from "react-query";
 import { API } from "../config/api";
+import { Col } from "react-bootstrap";
 
 function Landing() {
   const [sellersList, setSellersList] = useState(sellers);
@@ -35,7 +36,7 @@ function Landing() {
   });
 
   return (
-    <div  style={{ backgroundColor: "#E5E5E5" }}>
+    <div style={{ backgroundColor: "#E5E5E5" }}>
       <Header />
 
       <Hero />
@@ -50,7 +51,7 @@ function Landing() {
                   <Link
                     key={user.id}
                     to={`#`}
-                    className="col-3"
+                    className="col-sm-12 col-lg-3 mb-3"
                     style={{
                       textDecoration: "none",
                     }}
@@ -77,7 +78,7 @@ function Landing() {
                     <Link
                       key={product.data.data.product.user.id}
                       to={`/restaurant/${product.data.data.product.user.id}/food`}
-                      className="col-3"
+                      className="col-sm-12 col-lg-3 mb-3"
                       style={{
                         textDecoration: "none",
                       }}
