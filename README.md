@@ -1,5 +1,9 @@
 # WaysFood
 
+## API
+https://github.com/zaenalarifin12/DWF21ZA_foodWays_api
+## Screenshot
+
 <img src="./screenshot/Landing.png" width=70% />
 <img src="./screenshot/login.png" width=70% /> 
 <img src="./screenshot/register.png" width=70% />
