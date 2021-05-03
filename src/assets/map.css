@@ -1,0 +1,19 @@
+.map-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.sidebar {
+  position: absolute;
+  margin: 20px 20px 30px 20px;
+  width: 25%;
+  top: 0;
+  bottom: 0;
+  padding: 20px;
+  background-color: #ffffff;
+  overflow-y: scroll;
+  font-family: Open Sans, sans-serif;
+}
+
